@@ -1,0 +1,10 @@
+<a href="#" class="block py-2 px-4 rounded hover:bg-yellow-700 transition ease-in-out duration-[150ms]">Dashboard</a>
+<a href="table.php?type=adminusers" class="block py-2 px-4 rounded hover:bg-yellow-700 transition ease-in-out duration-[150ms]">Admin</a>
+<a href="table.php?type=kategori" class="block py-2 px-4 rounded hover:bg-yellow-700 transition ease-in-out duration-[150ms]">Kategori Obat</a>
+<a href="table.php?type=golongan" class="block py-2 px-4 rounded hover:bg-yellow-700 transition ease-in-out duration-[150ms]">Golongan Obat</a>
+<a href="table.php?type=obat" class="block py-2 px-4 rounded hover:bg-yellow-700 transition ease-in-out duration-[150ms]">Obat-obatan</a>
+<a href="table.php?type=transaksi" class="block py-2 px-4 rounded hover:bg-yellow-700 transition ease-in-out duration-[150ms]">Transaksi</a>
+<a href="table.php?type=recipe" class="block py-2 px-4 rounded hover:bg-yellow-700 transition ease-in-out duration-[150ms]">Daftar Resep</a>
+<a href="table.php?type=laporan" class="block py-2 px-4 rounded hover:bg-yellow-700 transition ease-in-out duration-[150ms]">Laporan</a>
+<a href="profile.php?id=<?php echo $_SESSION['id_adminusers'] ?>" class="block py-2 px-4 rounded hover:bg-yellow-700 transition ease-in-out duration-[150ms]">Profile</a>
+<a href="logout.php" class="flex items-center bg-[#EF1010] py-2 px-4 rounded hover:bg-[#9F0909] absolute bottom-10 transition ease-in-out duration-[150ms]"><svg fill="#ffffff" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" class="w-[1.5rem] h-[1.5rem] mr-[10px]"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12.207 9H5V7h7.136L11.05 5.914 12.464 4.5 16 8.036l-3.536 3.535-1.414-1.414L12.207 9zM10 4H8V2H2v12h6v-2h2v4H0V0h10v4z" fill-rule="evenodd"></path></g></svg>Log Out</a>
