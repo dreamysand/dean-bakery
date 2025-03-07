@@ -38,10 +38,17 @@
                 <input class="w-full px-3 py-2 border border-black rounded" type="number" id="keuntungan" name="keuntungan" required>
             </div>
             <div class="mb-4">
-                <label class="block text-sm font-bold mb-2" for="kategori">Kategori</label>
-                <select class="w-full px-3 py-2 border border-black rounded" type="password" id="kategori" name="kategori" required>
+                <label class="block text-sm font-bold mb-2" for="id_kategori">Kategori</label>
+                <select class="w-full px-3 py-2 border border-black rounded" type="password" id="id_kategori" name="id_kategori" required>
+                    <?php
+                    $table = "kategori";
+                    $kategori = new Kategori();
+                    $kategoris = $kategori->SelectKategoris();
+                    ?>
                     <option value="" disabled selected>Pilih Kategori</option>
-                    <option value="Roti">Roti</option>
+                    <?php foreach ($kategoris as $kategori): ?>
+                        <option  value="<?php echo $kategori['id_kategori'] ?>"><?php echo $kategori['kategori'] ?></option>
+                    <?php endforeach ?>
                 </select>
             </div>
             <div class="mb-4">

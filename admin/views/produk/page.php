@@ -38,24 +38,58 @@
         </div>
         
         <div class="overflow-x-auto p-4">
-            <div class="flex space-x-6 w-max">    
-                <div class="bg-white p-6 w-[300px] flex-none rounded-lg shadow-lg transform hover:scale-105 transition ease-in-out duration-300 cursor-pointer border border-gray-200" onclick="window.location.href='table.php?type=obat&id=<?php echo $row['id']; ?>&page=<?php echo $page; ?>'">
-                    <img src="../assets/roti-tawar.jpg" alt="Produk 1" class="h-[200px] w-full object-cover mb-4 rounded-md">
-                    <h3 class="text-xl font-semibold text-center text-gray-800">Roti Tawar</h3>
-                    <p class="text-center text-gray-500">Original</p>
-                    <p class="text-center">Rp 10.000</p>
-                    <div class="flex justify-evenly mt-3">
-                        <a href="" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
-                            <i class="fa-solid fa-pen-to-square text-[#1B2ED6]"></i>
-                        </a>
-                        <a href="" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
-                            <i class="fa-solid fa-cart-shopping text-[#006E2A]"></i>
-                        </a>
-                        <a href="" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
-                            <i class="fa-solid fa-trash-can text-[#FF0909]"></i>
-                        </a>
+            <div class="flex space-x-6 w-max">
+                <?php foreach ($produks_Data as $produk): ?>
+                    <?php
+                    $firstVarian = true;
+                    $list_Harga = [];
+                    $id_produk = $produk['id_produk'];
+
+                    $table_varian = "detail_produk";
+                    $varians = $produks->SelectVarian($id_produk);
+                    ?>
+                    <div class="bg-white p-6 w-[300px] flex-none rounded-lg shadow-lg transform hover:scale-105 transition ease-in-out duration-300 cursor-pointer border border-gray-200" onclick="window.location.href='table.php?type=obat&id=<?php echo $row['id']; ?>&page=<?php echo $page; ?>'">
+                        <?php foreach ($varians as $varian): ?>
+                            <?php if ($firstVarian): ?>
+                                <img src="<?php echo $varian['gambar'] ?>" alt="Produk 1" class="h-[200px] w-full object-cover mb-4 rounded-md">
+                                <?php
+                                $firstVarian = false;
+                                ?>
+                            <?php endif ?>
+                        <?php endforeach ?>
+                        
+                        <h3 class="text-xl font-semibold text-center text-gray-800">Roti Tawar</h3>
+                        <p class="text-center text-gray-500">
+                            <?php foreach ($varians as $varian): ?>
+                                <?php echo $varian['varian'] ?>,
+                            <?php endforeach ?>
+                        </p>
+                        <?php
+                        foreach ($varians as $varian) {
+                            $list_Harga[] = $varian['harga_jual']; 
+                        }
+                        $harga_max = max($list_Harga);
+                        $harga_min = min($list_Harga);
+                        ?>
+
+                        <?php if ($harga_max == $harga_min): ?>
+                            <p class="text-center">Rp <?php echo number_format($harga_min, 0, ',', '.') ?></p>
+                        <?php else: ?>
+                            <p class="text-center">Rp <?php echo number_format($harga_min, 0, ',', '.') ?> - <?php echo number_format($harga_max, 0, ',', '.') ?></p>
+                        <?php endif ?>
+                        <div class="flex justify-evenly mt-3">
+                            <a href="" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
+                                <i class="fa-solid fa-pen-to-square text-[#1B2ED6]"></i>
+                            </a>
+                            <a href="" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
+                                <i class="fa-solid fa-cart-shopping text-[#006E2A]"></i>
+                            </a>
+                            <a href="" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
+                                <i class="fa-solid fa-trash-can text-[#FF0909]"></i>
+                            </a>
+                        </div>
                     </div>
-                </div>
+                <?php endforeach ?>
             </div>
         </div>
     </div>

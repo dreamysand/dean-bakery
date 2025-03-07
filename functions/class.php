@@ -540,9 +540,9 @@ class Produk
 		])) {
 			$column = $stmt->fetchColumn();
 			if ($column > 0) {
-				return true;
+				return $column;
 			} else {
-				return false;
+				return null;
 			}
 		}
 		$stmt = null;
@@ -577,36 +577,154 @@ class Produk
 					":id_produk" => $id_Produk
 				])) {
 					$column = $stmt->fetchColumn();
-					if ($colum > 0) {
-						return true;
+					if ($column > 0) {
+						return $column;
 					} else {
-						return false;
+						return null;
 					}
 				}
 			}
 		}
+		$stmt = null;
 	}
 
 	function SelectProduks()
 	{
-		global $config, $table_produk, $table_varian;
-		$produks = [];
+		global $config, $table_produk;
 		$sql_Select_Query = "SELECT * FROM $table_produk";
 
 		$stmt = $config->prepare($sql_Select_Query);
 		if ($stmt->execute()) {
 			$result_Produk = $stmt->fetchAll(PDO::FETCH_ASSOC);
-			$stmt = null;
-			foreach ($result_Produk as $produk) {
-				$id_Produk = $produk['id'];
-			}
+			return $result_Produk;
+		} else {
+			return null;
 		}
 	}
 
-	// function AddProduk()
-	// {
-		
-	// }
+	function SelectProduk($id_produk)
+	{
+		global $config, $table_produk;
+		$sql_Select_Query = "SELECT * FROM $table_produk WHERE fid_produk = :id_produk";
+
+		$stmt = $config->prepare($sql_Select_Query);
+		if ($stmt->execute([
+			":id_produk" => $id_produk
+		])) {
+			$result_Produk = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			return $result_Produk;
+		} else {
+			return null;
+		}
+		$stmt = null;
+	}
+
+	function SelectVarian($id_produk)
+	{
+		global $config, $table_varian;
+		$sql_Select_Query = "SELECT * FROM $table_varian WHERE fid_produk = :id_produk";
+
+		$stmt = $config->prepare($sql_Select_Query);
+		if ($stmt->execute([
+			":id_produk" => $id_produk
+		])) {
+			$result_Varian = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			return $result_Varian;
+		} else {
+			return null;
+		}
+		$stmt = null;
+	}
+
+	function AddProduk($nama_produk, $id_kategori, $deskripsi)
+	{
+		global $config, $table_produk;
+		$sql_Add_Query = "INSERT INTO $table_produk
+		(nama_produk,
+			fid_kategori,
+			deskripsi)
+		VALUES
+		(:nama_produk,
+			:id_kategori,
+			:deskripsi)";
+
+		$stmt = $config->prepare($sql_Add_Query);
+		if ($stmt->execute([
+			":nama_produk" => $nama_produk,
+			"id_kategori" => $id_kategori,
+			":deskripsi" => $deskripsi
+		])) {
+			return true;
+		} else {
+			return false;
+		}
+		$stmt = null;
+	}
+
+	function AddVarian($nama_produk, $varian, $tanggal_expired, $stok, $modal, $harga_jual, $keuntungan, $gambar)
+	{
+		global $config, $table_produk, $table_varian;
+		$sql_Select_Query = "SELECT id_produk 
+		FROM $table_produk
+		WHERE
+		nama_produk = :nama_produk";
+
+		$stmt = $config->prepare($sql_Select_Query);
+		if ($stmt->execute([
+			":nama_produk" => $nama_produk
+		])) {
+			if ($produk = $stmt->fetch(PDO::FETCH_ASSOC)) {
+				$stmt = null;
+				$id_produk = $produk['id_produk'];
+
+				$sql_Add_Query = "INSERT INTO $table_varian
+				(fid_produk,
+					varian,
+					tanggal_expired,
+					stok,
+					modal,
+					harga_jual,
+					keuntungan,
+					gambar)
+				VALUES
+				(:id_produk,
+					:varian,
+					:tanggal_expired,
+					:stok,
+					:modal,
+					:harga_jual,
+					:keuntungan,
+					:gambar)";
+
+				$stmt = $config->prepare($sql_Add_Query);
+				if ($stmt->execute([
+					":id_produk" => $id_produk,
+					"varian" => $varian,
+					"tanggal_expired" => $tanggal_expired,
+					"stok" => $stok,
+					"modal" => $modal,
+					"harga_jual" => $harga_jual,
+					"keuntungan" => $keuntungan,
+					":gambar" => $gambar
+				])) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		}
+		$stmt = null;
+	}
+
+	function UpdateProduk($value='')
+	{
+		// code...
+	}
+
+	function UpdateVarian($value='')
+	{
+		// code...
+	}
 }
 /**
  * 
@@ -665,9 +783,11 @@ class Kategori
 	{
 		global $config, $table;
 		$sql_Add_Query = "INSERT INTO $table
-		(kategori, gambar)
+		(kategori, 
+			gambar)
 		VALUES
-		(:kategori, :gambar)";
+		(:kategori, 
+			:gambar)";
 
 		$stmt = $config->prepare($sql_Add_Query);
 		if ($stmt->execute([
@@ -698,6 +818,7 @@ class Kategori
 				return null;
 			}
 		}
+		$stmt = null;
 	}
 
 	function SelectKategoris()
@@ -713,6 +834,7 @@ class Kategori
 				return null;
 			}
 		}
+		$stmt = null;
 	}
 
 	function UpdateKategori($kategori, $gambar, $id_kategori)
@@ -735,6 +857,176 @@ class Kategori
 		} else {
 			return false;
 		}
+		$stmt = null;
+	}
+
+	function DeleteKategori($id_kategori)
+	{
+		global $config, $table;
+		$sql_Delete_Query = "DELETE 
+		FROM $table
+		WHERE id_kategori = :id_kategori";
+
+		$stmt = $config->prepare($sql_Delete_Query);
+		if ($stmt->execute([
+			":id_kategori" => $id_kategori
+		])) {
+			return true;
+		} else {
+			return false;
+		}
+		$stmt = null;
+	}
+}
+/**
+ * 
+ */
+class Member
+{
+	
+	function CheckMember($no_telp)
+	{
+		global $config, $table;
+		$sql_Check_Query = "SELECT COUNT(*)
+		FROM $table
+		WHERE
+		no_telp = :no_telp";
+
+		$stmt = $config->prepare($sql_Check_Query);
+		if ($stmt->execute([
+			":no_telp" => $no_telp
+		])) {
+			$column = $stmt->fetchColumn();
+			if ($column > 0) {
+				return $column;
+			} else {
+				return null;
+			}
+		}
+		$stmt = null;
+	}
+
+	function CheckMemberUpdate($no_telp, $id_member)
+	{
+		global $config, $table;
+		$sql_Check_Query = "SELECT COUNT(*)
+		FROM $table
+		WHERE
+		no_telp = :no_telp
+		AND
+		id_member != :id_member";
+
+		$stmt = $config->prepare($sql_Check_Query);
+		if ($stmt->execute([
+			":no_telp" => $no_telp,
+			":id_member" => $id_member
+		])) {
+			$column = $stmt->fetchColumn();
+			if ($column > 0) {
+				return $column;
+			} else {
+				return null;
+			}
+		}
+		$stmt = null;
+	}
+
+	function AddMember($nama, $no_telp)
+	{
+		global $config, $table;
+		$sql_Add_Query = "INSERT INTO $table
+		(nama, no_telp)
+		VALUES
+		(:nama, :no_telp)";
+
+		$stmt = $config->prepare($sql_Add_Query);
+		if ($stmt->execute([
+			":nama" => $nama,
+			":no_telp" => $no_telp
+		])) {
+			return true;
+		} else {
+			return false;
+		}
+		$stmt = null;
+	}
+
+	function SelectMember($id_member)
+	{
+		global $config, $table;
+		$sql_Select_Query = "SELECT * FROM
+		$table
+		WHERE
+		id_member = :id_member";
+
+		$stmt = $config->prepare($sql_Select_Query);
+		if ($stmt->execute([
+			":id_member" => $id_member
+		])) {
+			if ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+				return $result;
+			} else {
+				return null;
+			}
+		}
+		$stmt = null;
+	}
+
+	function SelectMembers()
+	{
+		global $config, $table;
+		$sql_Select_Query = "SELECT * FROM $table";
+
+		$stmt = $config->prepare($sql_Select_Query);
+		if ($stmt->execute()) {
+			if ($result = $stmt->fetchAll(PDO::FETCH_ASSOC)) {
+				return $result;
+			} else {
+				return null;
+			}
+		}
+		$stmt = null;
+	}
+
+	function UpdateMember($nama, $no_telp, $id_member)
+	{
+		global $config, $table;
+		$sql_Update_Query = "UPDATE $table
+		SET
+		nama = :nama,
+		no_telp = :no_telp
+		WHERE
+		id_member = :id_member";
+
+		$stmt = $config->prepare($sql_Update_Query);
+		if ($stmt->execute([ 
+			"nama" => $nama,
+			"no_telp" => $no_telp,
+			$id_member => $id_member
+		])) {
+			return true;
+		} else {
+			return false;
+		}
+		$stmt = null;
+	}
+
+	function DeleteMember($id_member)
+	{
+		global $config, $table;
+		$sql_Delete_Query = "DELETE 
+		FROM $table
+		WHERE id_member = :id_member";
+
+		$stmt = $config->prepare($sql_Delete_Query);
+		if ($stmt->execute([
+			":id_member" => $id_member
+		])) {
+			return true;
+		} else {
+			return false;
+		}
+		$stmt = null;
 	}
 }
 ?>
