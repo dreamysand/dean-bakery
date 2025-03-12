@@ -520,6 +520,83 @@ class Account
 		}
 		$stmt = null;
 	}
+
+	function GenerateToken($length = 32)
+	{
+		$token = bin2hex(random_bytes($length));
+
+		return $token;
+	}
+
+	function InsertToken($id_admin, $token, $expired)
+	{
+		global $config, $table_token;
+		$sql_Add_Query = "INSERT INTO
+		$table_token 
+		(id_admin,
+			token,
+			expired)
+		VALUES
+		(:id_admin,
+			:token,
+			:expired)";
+
+		$stmt = $config->prepare($sql_Add_Query);
+		if ($stmt->execute([
+			":id_admin" => $id_admin,
+			":token" => $token,
+			":expired" => $expired
+		])) {
+			return true;
+		} else {
+			return false;
+		}
+		$stmt = null;
+	}
+
+	function CheckToken($token, $time)
+	{
+		global $config, $table_token;
+		$sql_Check_Query = "SELECT COUNT(*) 
+		FROM 
+		$table_token
+		WHERE
+		token = :token
+		AND
+		expired > NOW()";
+
+		$stmt = $config->prepare($sql_Check_Query);
+		if ($stmt->execute([
+			":token" => $token
+		])) {
+			$column = $stmt->fetchColumn();
+			if ($column > 0) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		$stmt = null;
+	}
+
+	function DeleteToken($token)
+	{
+		global $config, $table_token;
+		$sql_Delete_Query = "DELETE FROM 
+		$table_token
+		WHERE
+		token = :token";
+
+		$stmt = $config->prepare($sql_Delete_Query);
+		if ($stmt->execute([
+			":token" => $token
+		])) {
+			return true;
+		} else {
+			return false;
+		}
+		$stmt = null;
+	}
 }
 /**
  * 
@@ -1027,6 +1104,63 @@ class Member
 			return false;
 		}
 		$stmt = null;
+	}
+}
+/**
+ * 
+ */
+class Cart
+{
+	public array $cart = [];
+
+	function __construct()
+	{
+		$this->cart = [];
+	}
+
+	function AddItems($id_produk, $id_varian, $nama_produk, $varian, $harga_jual, $jumlah, $tanggal_expired, $gambar)
+	{
+		if (!isset($this->cart[$id_produk])) {
+			$this->cart[$id_produk] = [];
+		}
+
+		if (isset($this->cart[$id_produk][$id_varian])) {
+			$this->cart[$id_produk][$id_varian]["jumlah"] += $jumlah;
+		} else {
+			$this->cart[$id_produk][$id_varian] = [
+				"id_produk" => $id_produk,
+				"id_varian" => $id_varian,
+				"nama_produk" => $nama_produk,
+				"varian" => $varian,
+				"harga_jual" => $harga_jual,
+				"jumlah" => $jumlah,
+				"tanggal_expired" => $tanggal_expired,
+				"gambar" => $gambar
+			];
+		}
+		return isset($this->cart[$id_produk][$id_varian]);
+	}
+
+	function GetItems()
+	{
+		return $this->cart;
+	}
+
+	function DeleteItems($id_produk, $id_varian)
+	{
+		if (isset($this->cart[$id_produk][$id_varian])) {
+			unset($this->cart[$id_produk][$id_varian]);
+			if (empty($this->cart[$id_produk])) {
+				unset($this->cart[$id_produk]);
+			}	
+		}
+	}
+
+	function DeleteAllItems()
+	{
+		if (isset($this->cart)) {
+			unset($this->cart);
+		}
 	}
 }
 ?>

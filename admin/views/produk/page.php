@@ -47,6 +47,19 @@
 
                     $table_varian = "detail_produk";
                     $varians = $produks->SelectVarian($id_produk);
+
+                    $data_produk = [];
+                    foreach ($varians as $varian) {
+                        $data_produk[$id_produk][$varian['id']] = [
+                            "id_produk" => $id_produk,
+                            "id_varian" => $varian['id'],
+                            "nama_produk" => $produk['nama_produk'],
+                            "varian" => $varian['varian'],
+                            "harga_jual" => $varian['harga_jual'],
+                            "tanggal_expired" => $varian['tanggal_expired'],
+                            "gambar" => $varian['gambar'],
+                        ];
+                    }
                     ?>
                     <div class="bg-white p-6 w-[300px] flex-none rounded-lg shadow-lg transform hover:scale-105 transition ease-in-out duration-300 cursor-pointer border border-gray-200" onclick="window.location.href='table.php?type=obat&id=<?php echo $row['id']; ?>&page=<?php echo $page; ?>'">
                         <?php foreach ($varians as $varian): ?>
@@ -58,7 +71,7 @@
                             <?php endif ?>
                         <?php endforeach ?>
                         
-                        <h3 class="text-xl font-semibold text-center text-gray-800">Roti Tawar</h3>
+                        <h3 class="text-xl font-semibold text-center text-gray-800"><?= $produk['nama_produk'] ?></h3>
                         <p class="text-center text-gray-500">
                             <?php foreach ($varians as $varian): ?>
                                 <?php echo $varian['varian'] ?>,
@@ -81,7 +94,7 @@
                             <a href="" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
                                 <i class="fa-solid fa-pen-to-square text-[#1B2ED6]"></i>
                             </a>
-                            <a href="" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
+                            <a href="#" onclick="selectVarian(<?= $produk['id_produk']; ?>)" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
                                 <i class="fa-solid fa-cart-shopping text-[#006E2A]"></i>
                             </a>
                             <a href="" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
@@ -93,9 +106,94 @@
             </div>
         </div>
     </div>
-    
+
+    <div class="bg-white p-8 rounded-lg shadow-lg w-[80%] lg:w-[30%] hidden my-5 absolute z-[999] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" id="choose_varian">
+        <h2 class="text-3xl font-bold text-center mb-6">PILIH VARIAN</h2>
+        <form action="keranjang.php" method="POST">
+            <input class="w-full px-3 py-2 border border-black rounded" type="hidden" id="id_produk" name="id_produk" required value="">
+            <input class="w-full px-3 py-2 border border-black rounded" type="hidden" id="nama_produk" name="nama_produk" required value="">
+            <input class="w-full px-3 py-2 border border-black rounded" type="hidden" id="varian" name="varian" required value="">
+            <input class="w-full px-3 py-2 border border-black rounded" type="hidden" id="harga_jual" name="harga_jual" required value="">
+            <input class="w-full px-3 py-2 border border-black rounded" type="hidden" id="tanggal_expired" name="tanggal_expired" required value="">
+            <input class="w-full px-3 py-2 border border-black rounded" type="hidden" id="gambar" name="gambar" required value="">
+            <div class="mb-4">
+                <label class="block text-sm font-bold mb-2" for="id_produk">Id Varian</label>
+                <select class="w-full px-3 py-2 border border-black rounded" name="id_varian" id="id_varian" required onchange="updateData()">
+
+                </select>
+            </div>
+            <div class="text-center">
+                <button class="bg-[#E7B548] text-white font-bold py-2 px-4 rounded-md w-full mb-2" type="submit">ADD</button>
+            </div>
+            <div class="text-center">
+                <button class="bg-[#CB2828] text-white font-bold py-2 px-4 rounded-md w-full" onclick="closeSelectVarian()">BACK</button>
+            </div>
+        </form>
+    </div>
+
     <footer class="absolute bottom-0 right-0 left-0 bg-[#101018] p-6 text-center">
         <p class="text-white">&copy; 2025 Dean Bakery. All Right Reserved</p>
     </footer>
+
+    <script>
+        const data_produk = <?php echo json_encode($data_produk); ?>
+
+        function openSelectVarian(id_produk) {
+            const id_produk_input = document.getElementById("id_produk");
+            id_produk_input.value = id_produk;
+            const form = document.getElementById("choose_varian");
+            form.classList.remove("hidden");
+        }
+
+        function closeSelectVarian() {
+            const id_produk_input = document.getElementById("id_produk");
+            id_produk_input.value = "";
+            const form = document.getElementById("choose_varian");
+            form.classList.add("hidden");
+        }
+
+        function updateData() {
+            const id_varian = document.getElementById("id_varian").value;
+            const id_produk = document.getElementById("id_produk").value;
+            const nama_produk = document.getElementById("nama_produk"); 
+            const varian = document.getElementById("varian"); 
+            const harga_jual = document.getElementById("harga_jual"); 
+            const tanggal_expired = document.getElementById("tanggal_expired"); 
+            const gambar = document.getElementById("gambar"); 
+
+            if (id_varian && id_produk) {
+                nama_produk.value = data_produk[id_produk][id_varian]["nama_produk"];
+                varian.value = data_produk[id_produk][id_varian]["varian"];
+                harga_jual.value = data_produk[id_produk][id_varian]["harga_jual"];
+                tanggal_expired.value = data_produk[id_produk][id_varian]["tanggal_expired"];
+                gambar.value = data_produk[id_produk][id_varian]["gambar"];
+            } else {
+                nama_produk.value = "";
+                varian.value = "";
+                harga_jual.value = "";
+                tanggal_expired.value = "";
+                gambar.value = "";
+            }
+        }
+
+        function selectVarian(id_produk) {
+            const varianSelect = document.getElementById("id_varian");
+            varianSelect.innerHTML = '<option value="" disabled selected>Pilih Varian</option>';
+
+            if (data_produk[id_produk]) {
+                Object.keys(data_produk[id_produk]).forEach(key => {
+                    const varian = data_produk[id_produk][key];
+
+                    const option = document.createElement("option");
+                    option.value = varian.id_varian;
+                    option.textContent = varian.varian;
+
+                    varianSelect.appendChild(option);
+                })
+
+                openSelectVarian(id_produk);
+            }
+        }
+    </script>
 </body>
 </html>

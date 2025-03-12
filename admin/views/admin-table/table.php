@@ -49,14 +49,11 @@
                         <td class="px-2 py-2 text-[clamp(0.45rem,1vw,1rem)]"><?= $admin['status']?></td>
                         <td class="px-2 py-2 text-[clamp(0.45rem,1vw,1rem)]">p</td>
                         <td class="px-2 py-2 text-[clamp(0.45rem,1vw,1rem)] flex justify-evenly">
-                            <form action="edit.php?admin" method="POST">
-                                <input type="hidden" value="<?= $admin['id']?>" name="id_admin">
-                                <button href="edit.php?id_admin=<?= $admin['id'] ?>" type="submit" class="text-[clamp(0.45rem,1vw,4rem)] p-3 hover:bg-opacity-75 rounded-md w-max">
-                                    <i class="fa-solid fa-pen-to-square text-[#1B2ED6]"></i>
-                                </button>
-                            </form>
-                            <a href="#" onclick="confirmDelete(<?=$admin['id'] ?>)" class="text-[clamp(0.45rem,1vw,4rem)] p-3 hover:bg-opacity-75 text-white rounded-md w-max">
-                                <i class="fa-solid fa-trash-can text-[#FF0909]"></i>Del
+                            <a href="#" onclick="editAdmin(<?=$admin['id'] ?>)" class="text-[clamp(0.45rem,1vw,4rem)] p-3 hover:bg-opacity-75 rounded-md w-max">
+                                <i class="fa-solid fa-pen-to-square text-[#1B2ED6]"></i>
+                            </a>
+                            <a href="#" onclick="confirmDelete(<?=$admin['id'] ?>)" class="text-[clamp(0.45rem,1vw,4rem)] p-3 hover:bg-opacity-75 rounded-md w-max">
+                                <i class="fa-solid fa-trash-can text-[#FF0909]"></i>
                             </a>
                         </td>
                     </tr>
@@ -86,6 +83,20 @@
                 document.body.appendChild(form);
                 form.submit();
             }
+        }
+        function editAdmin(id) {
+            let form = document.createElement("form");
+            form.method = "POST";
+            form.action = "edit.php?admin";
+
+            let input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "id_admin";
+            input.value = id;
+
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
         }
     </script>
 </body>
