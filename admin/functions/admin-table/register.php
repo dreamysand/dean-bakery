@@ -48,14 +48,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" &&
                 ?>
                 <script>
                     alert("Registrasi berhasil");
-                    window.location.href = "register-admin.php";
+                    window.location.href = "admin-table.php";
                 </script>
                 <?php
             } else {
                 ?>
                 <script>
                     alert("Registrasi gagal");
-                    window.location.href = "register-admin.php";
+                    window.location.href = "admin-table.php";
                 </script>
                 <?php
             }

@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
     <style>
         body {
-            background-color: #ffffff;
+            background-color: #F9EFDA;
         }
     </style>
 </head>
@@ -41,14 +41,10 @@
             <div class="flex space-x-6 w-max">
                 <?php foreach ($produks_Data as $produk): ?>
                     <?php
-                    $firstVarian = true;
-                    $list_Harga = [];
                     $id_produk = $produk['id_produk'];
 
                     $table_varian = "detail_produk";
-                    $varians = $produks->SelectVarian($id_produk);
-
-                    $data_produk = [];
+                    $varians = $produks->SelectVarians($id_produk);
                     foreach ($varians as $varian) {
                         $data_produk[$id_produk][$varian['id']] = [
                             "id_produk" => $id_produk,
@@ -58,77 +54,44 @@
                             "harga_jual" => $varian['harga_jual'],
                             "tanggal_expired" => $varian['tanggal_expired'],
                             "gambar" => $varian['gambar'],
+                            "stok" => $varian['stok'],
+                            "kode_bar" => $varian['kode_bar']
                         ];
                     }
                     ?>
-                    <div class="bg-white p-6 w-[300px] flex-none rounded-lg shadow-lg transform hover:scale-105 transition ease-in-out duration-300 cursor-pointer border border-gray-200" onclick="window.location.href='table.php?type=obat&id=<?php echo $row['id']; ?>&page=<?php echo $page; ?>'">
-                        <?php foreach ($varians as $varian): ?>
-                            <?php if ($firstVarian): ?>
-                                <img src="<?php echo $varian['gambar'] ?>" alt="Produk 1" class="h-[200px] w-full object-cover mb-4 rounded-md">
-                                <?php
-                                $firstVarian = false;
-                                ?>
-                            <?php endif ?>
-                        <?php endforeach ?>
-                        
-                        <h3 class="text-xl font-semibold text-center text-gray-800"><?= $produk['nama_produk'] ?></h3>
-                        <p class="text-center text-gray-500">
-                            <?php foreach ($varians as $varian): ?>
-                                <?php echo $varian['varian'] ?>,
-                            <?php endforeach ?>
-                        </p>
-                        <?php
-                        foreach ($varians as $varian) {
-                            $list_Harga[] = $varian['harga_jual']; 
-                        }
-                        $harga_max = max($list_Harga);
-                        $harga_min = min($list_Harga);
-                        ?>
+                    <?php foreach ($varians as $varian): ?>
+                        <div class="bg-white p-6 w-[300px] flex-none rounded-lg shadow-lg transform hover:scale-105 transition ease-in-out duration-300 cursor-pointer border border-gray-200">
+                            <img src="<?php echo $varian['gambar'] ?>" alt="Produk 1" class="h-[200px] w-full object-cover mb-4 rounded-md">
+                            <?php
+                            $kode = $varian['kode_bar'];
 
-                        <?php if ($harga_max == $harga_min): ?>
-                            <p class="text-center">Rp <?php echo number_format($harga_min, 0, ',', '.') ?></p>
-                        <?php else: ?>
-                            <p class="text-center">Rp <?php echo number_format($harga_min, 0, ',', '.') ?> - <?php echo number_format($harga_max, 0, ',', '.') ?></p>
-                        <?php endif ?>
-                        <div class="flex justify-evenly mt-3">
-                            <a href="" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
-                                <i class="fa-solid fa-pen-to-square text-[#1B2ED6]"></i>
-                            </a>
-                            <a href="#" onclick="selectVarian(<?= $produk['id_produk']; ?>)" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
-                                <i class="fa-solid fa-cart-shopping text-[#006E2A]"></i>
-                            </a>
-                            <a href="" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
-                                <i class="fa-solid fa-trash-can text-[#FF0909]"></i>
-                            </a>
+                            $barcode = $generator->getBarcode($kode, $generator::TYPE_CODE_128);
+                            ?>
+                            <h3 class="text-xl font-semibold text-center flex justify-center"><?= $barcode ?></h3>
+                            <p class="text-center text-gray-800">
+                                <?php echo $kode ?>
+                            </p>  
+                            <h3 class="text-xl font-semibold text-center text-gray-800"><?= $produk['nama_produk'] ?></h3>
+                            <p class="text-center text-gray-500">
+                                <?php echo $varian['varian'] ?>
+                            </p>
+                            <p class="text-center">Rp <?php echo number_format($varian['harga_jual'], 0, ',', '.') ?></p>
+                            <div class="flex justify-evenly mt-3">
+                                <a href="" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
+                                    <i class="fa-solid fa-pen-to-square text-[#1B2ED6]"></i>
+                                </a>
+                                <a href="#" onclick="addToCart(<?= $produk['id_produk']; ?>, <?= $varian['id']; ?>)" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
+                                    <i class="fa-solid fa-cart-shopping text-[#006E2A]"></i>
+                                </a>
+                                <a href="" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
+                                    <i class="fa-solid fa-trash-can text-[#FF0909]"></i>
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    <?php endforeach ?>
                 <?php endforeach ?>
             </div>
         </div>
-    </div>
-
-    <div class="bg-white p-8 rounded-lg shadow-lg w-[80%] lg:w-[30%] hidden my-5 absolute z-[999] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" id="choose_varian">
-        <h2 class="text-3xl font-bold text-center mb-6">PILIH VARIAN</h2>
-        <form action="keranjang.php" method="POST">
-            <input class="w-full px-3 py-2 border border-black rounded" type="hidden" id="id_produk" name="id_produk" required value="">
-            <input class="w-full px-3 py-2 border border-black rounded" type="hidden" id="nama_produk" name="nama_produk" required value="">
-            <input class="w-full px-3 py-2 border border-black rounded" type="hidden" id="varian" name="varian" required value="">
-            <input class="w-full px-3 py-2 border border-black rounded" type="hidden" id="harga_jual" name="harga_jual" required value="">
-            <input class="w-full px-3 py-2 border border-black rounded" type="hidden" id="tanggal_expired" name="tanggal_expired" required value="">
-            <input class="w-full px-3 py-2 border border-black rounded" type="hidden" id="gambar" name="gambar" required value="">
-            <div class="mb-4">
-                <label class="block text-sm font-bold mb-2" for="id_produk">Id Varian</label>
-                <select class="w-full px-3 py-2 border border-black rounded" name="id_varian" id="id_varian" required onchange="updateData()">
-
-                </select>
-            </div>
-            <div class="text-center">
-                <button class="bg-[#E7B548] text-white font-bold py-2 px-4 rounded-md w-full mb-2" type="submit">ADD</button>
-            </div>
-            <div class="text-center">
-                <button class="bg-[#CB2828] text-white font-bold py-2 px-4 rounded-md w-full" onclick="closeSelectVarian()">BACK</button>
-            </div>
-        </form>
     </div>
 
     <footer class="absolute bottom-0 right-0 left-0 bg-[#101018] p-6 text-center">
@@ -136,63 +99,63 @@
     </footer>
 
     <script>
-        const data_produk = <?php echo json_encode($data_produk); ?>
+        const data_produk = <?php echo json_encode($data_produk); ?>;
+        console.log(data_produk);
+        function addToCart(id_produk, id_varian) {
+            let form = document.createElement("form");
+            form.method = "POST";
+            form.action = "keranjang.php";
 
-        function openSelectVarian(id_produk) {
-            const id_produk_input = document.getElementById("id_produk");
-            id_produk_input.value = id_produk;
-            const form = document.getElementById("choose_varian");
-            form.classList.remove("hidden");
-        }
+            let input_id_produk = document.createElement("input");
+            input_id_produk.type = "hidden";
+            input_id_produk.name = "id_produk";
+            input_id_produk.value = id_produk;
 
-        function closeSelectVarian() {
-            const id_produk_input = document.getElementById("id_produk");
-            id_produk_input.value = "";
-            const form = document.getElementById("choose_varian");
-            form.classList.add("hidden");
-        }
+            let input_id_varian = document.createElement("input");
+            input_id_varian.type = "hidden";
+            input_id_varian.name = "id_varian";
+            input_id_varian.value = id_varian;
 
-        function updateData() {
-            const id_varian = document.getElementById("id_varian").value;
-            const id_produk = document.getElementById("id_produk").value;
-            const nama_produk = document.getElementById("nama_produk"); 
-            const varian = document.getElementById("varian"); 
-            const harga_jual = document.getElementById("harga_jual"); 
-            const tanggal_expired = document.getElementById("tanggal_expired"); 
-            const gambar = document.getElementById("gambar"); 
+            let nama_produk_input = document.createElement("input");
+            nama_produk_input.type = "hidden";
+            nama_produk_input.name = "nama_produk";
+            nama_produk_input.value = data_produk[id_produk][id_varian]["nama_produk"];
 
-            if (id_varian && id_produk) {
-                nama_produk.value = data_produk[id_produk][id_varian]["nama_produk"];
-                varian.value = data_produk[id_produk][id_varian]["varian"];
-                harga_jual.value = data_produk[id_produk][id_varian]["harga_jual"];
-                tanggal_expired.value = data_produk[id_produk][id_varian]["tanggal_expired"];
-                gambar.value = data_produk[id_produk][id_varian]["gambar"];
-            } else {
-                nama_produk.value = "";
-                varian.value = "";
-                harga_jual.value = "";
-                tanggal_expired.value = "";
-                gambar.value = "";
-            }
-        }
+            let varian_input = document.createElement("input");
+            varian_input.type = "hidden";
+            varian_input.name = "varian";
+            varian_input.value = data_produk[id_produk][id_varian]["varian"];
 
-        function selectVarian(id_produk) {
-            const varianSelect = document.getElementById("id_varian");
-            varianSelect.innerHTML = '<option value="" disabled selected>Pilih Varian</option>';
+            let harga_jual_input = document.createElement("input");
+            harga_jual_input.type = "hidden";
+            harga_jual_input.name = "harga_jual";
+            harga_jual_input.value = data_produk[id_produk][id_varian]["harga_jual"];
 
-            if (data_produk[id_produk]) {
-                Object.keys(data_produk[id_produk]).forEach(key => {
-                    const varian = data_produk[id_produk][key];
+            let tanggal_expired_input = document.createElement("input");
+            tanggal_expired_input.type = "hidden";
+            tanggal_expired_input.name = "tanggal_expired";
+            tanggal_expired_input.value = data_produk[id_produk][id_varian]["tanggal_expired"];
 
-                    const option = document.createElement("option");
-                    option.value = varian.id_varian;
-                    option.textContent = varian.varian;
+            let gambar_input = document.createElement("input");
+            gambar_input.type = "hidden";
+            gambar_input.name = "gambar";
+            gambar_input.value = data_produk[id_produk][id_varian]["gambar"];
 
-                    varianSelect.appendChild(option);
-                })
+            let stok_input = document.createElement("input");
+            stok_input.type = "hidden";
+            stok_input.name = "stok";
+            stok_input.value = data_produk[id_produk][id_varian]["stok"];
 
-                openSelectVarian(id_produk);
-            }
+            form.appendChild(input_id_produk);
+            form.appendChild(input_id_varian);
+            form.appendChild(nama_produk_input);
+            form.appendChild(varian_input);
+            form.appendChild(harga_jual_input);
+            form.appendChild(tanggal_expired_input);
+            form.appendChild(gambar_input);
+            form.appendChild(stok_input);
+            document.body.appendChild(form);
+            form.submit();
         }
     </script>
 </body>

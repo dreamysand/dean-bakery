@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
     <style>
         body {
-            background-color: #ffffff;
+            background-color: #F9EFDA;
         }
     </style>
 </head>

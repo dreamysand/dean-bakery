@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
     <style>
         body {
-            background-color: #ffffff;
+            background-color: #F9EFDA;
         }
     </style>
 </head>
@@ -34,28 +34,61 @@
         <!-- Container untuk produk dengan overflow-x -->
         <div class="flex justify-between mt-[5rem] items-end">
             <h3 class="text-[2.5rem] font-bold text-gray-800">Kategori</h3>
-            <h3 class="text-[1.5rem] font-bold text-[#E7B548] underline"><a href="">Lihat Semuanya</a></h3>
+            <button class="bg-[#E7B548] px-4 py-2 rounded text-white mt-2 mr-2" onclick="window.location.href='add.php?kategori'">Tambah Kategori</button>
         </div>
         
         <div class="overflow-x-auto p-4">
             <div class="flex space-x-6 w-max">    
-                <div class="bg-white p-6 w-[300px] flex-none rounded-lg shadow-lg transform hover:scale-105 transition ease-in-out duration-300 cursor-pointer border border-gray-200" onclick="window.location.href='table.php?type=obat&id=<?php echo $row['id']; ?>&page=<?php echo $page; ?>'">
-                    <img src="../assets/roti-tawar.jpg" alt="Produk 1" class="h-[200px] w-full object-cover mb-4 rounded-md">
-                    <h3 class="text-xl font-semibold text-center text-gray-800">Roti</h3>
-                    <p class="text-center">100 Produk</p>
-                    <div class="flex justify-evenly mt-3">
-                        <a href="" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
-                            <i class="fa-solid fa-pen-to-square text-[#1B2ED6]"></i>
-                        </a>
-                        <a href="" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
-                            <i class="fa-solid fa-trash-can text-[#FF0909]"></i>
-                        </a>
+                <?php foreach ($kategoris_Data as $kategori): ?>
+                    <div class="bg-white p-6 w-[300px] flex-none rounded-lg shadow-lg transform hover:scale-105 transition ease-in-out duration-300 cursor-pointer border border-gray-200" onclick="window.location.href='table.php?type=obat&id=<?php echo $row['id']; ?>&page=<?php echo $page; ?>'">
+                        <img src="<?php echo $kategori['gambar'] ?>" alt="Produk 1" class="h-[200px] w-full object-cover mb-4 rounded-md">
+                        <h3 class="text-xl font-semibold text-center text-gray-800"><?php echo $kategori['kategori'] ?></h3>
+                        <!-- <p class="text-center">100 Produk</p> -->
+                        <div class="flex justify-evenly mt-3">
+                            <a href="#" onclick="editKategori(<?=$kategori['id_kategori'] ?>)" class="text-[clamp(0.45rem,1vw,4rem)] p-3 hover:bg-opacity-75 rounded-md w-max">
+                                <i class="fa-solid fa-pen-to-square text-[#1B2ED6]"></i>
+                            </a>
+                            <a href="#" onclick="confirmDelete(<?=$kategori['id_kategori'] ?>)" class="text-[clamp(0.45rem,1vw,4rem)] p-3 hover:bg-opacity-75 rounded-md w-max">
+                                <i class="fa-solid fa-trash-can text-[#FF0909]"></i>
+                            </a>
+                        </div>
                     </div>
-                </div>
+                <?php endforeach ?>
             </div>
         </div>
     </div>
-    
+    <script>
+        function confirmDelete(id) {
+            if (confirm("Apakah anda yakin menghapus kategori ini?")) {
+                let form = document.createElement("form");
+                form.method = "POST";
+                form.action = "delete.php?kategori";
+
+                let input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "id_kategori";
+                input.value = id;
+
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+        function editKategori(id) {
+            let form = document.createElement("form");
+            form.method = "POST";
+            form.action = "edit.php?kategori";
+
+            let input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "id_kategori";
+            input.value = id;
+
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
     <footer class="absolute bottom-0 right-0 left-0 bg-[#101018] p-6 text-center">
         <p class="text-white">&copy; 2025 Dean Bakery. All Right Reserved</p>
     </footer>

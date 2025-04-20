@@ -6,6 +6,7 @@ require dirname(__DIR__, 1).DIRECTORY_SEPARATOR."functions".DIRECTORY_SEPARATOR.
 $cart = isset($_SESSION['cart']) ? unserialize($_SESSION['cart']) : new Cart();
 $_SESSION['cart'] = serialize($cart);
 require __DIR__.DIRECTORY_SEPARATOR."functions".DIRECTORY_SEPARATOR."keranjang".DIRECTORY_SEPARATOR."add-keranjang.php";
+require __DIR__.DIRECTORY_SEPARATOR."functions".DIRECTORY_SEPARATOR."keranjang".DIRECTORY_SEPARATOR."add-from-barcode.php";
 require __DIR__.DIRECTORY_SEPARATOR."functions".DIRECTORY_SEPARATOR."keranjang".DIRECTORY_SEPARATOR."select-keranjang.php";
 require __DIR__.DIRECTORY_SEPARATOR."functions".DIRECTORY_SEPARATOR."keranjang".DIRECTORY_SEPARATOR."delete-keranjang.php";
 require __DIR__.DIRECTORY_SEPARATOR."functions".DIRECTORY_SEPARATOR."keranjang".DIRECTORY_SEPARATOR."delete-all-keranjang.php";

@@ -19,7 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" &&
 			$gambar = $account_Data['gambar'];
 			if ($account->PasswordVerify($password, $db_Password)) {
 				$status = $account->UpdateStatusAdmin($id_admin);
-				if (!$status['value']) {
+				$login_time = $account->UpdateActiveTime($id_admin);
+				if (!$status['value'] && !$login_time) {
 					?>
 	                <script>
 	                    alert("<?= $status['msg']; ?>");

@@ -8,13 +8,13 @@ if (!$status['value']) {
 	?>
     <script>
         alert("<?= $status['msg']; ?>");
-        window.location.href = "login.php";
+        window.location.href = "dashboard.php";
     </script>
     <?php
 }
 session_unset();
 session_destroy();
 
-header("Location: ../login.php");
+header("Location: ../dashboard.php");
 exit();
 ?>

@@ -39,8 +39,57 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" &&
 
         $check_produk = $produk->CheckProduk($nama);
         if ($check_produk > 0) {
-            echo "Ping";
-            exit();
+            $produk_data = $produk->SelectProduk(null, $nama);
+            $id_produk = $produk_data['id_produk'];
+            if ($produk->UpdateProduk($id_produk, $nama, $id_kategori, $deskripsi)) {
+                $check_varian = $produk->CheckVarian($varian, $nama);
+                if ($check_varian > 0) {
+                    if ($varian_data = $produk->SelectVarian(null, null, $varian, $nama)) {
+                        $id_varian = $varian_data['id'];
+                        $image_old = $varian_data['gambar'];
+                        $path_image_old = str_replace($URL, $root_Path, $image_old);
+
+                        $image_File = $image->UpdateImage($_FILES['gambar'], $path_Image, $URL_Path, $path_image_old, $image_old);
+
+                        if ($image_File == null) {
+                            ?>
+                            <script>
+                                alert("Gambar kosong");
+                                window.location.href = "register-admin.php";
+                            </script>
+                            <?php   
+                        }
+                        if ($produk->UpdateVarian($id_varian, $varian, $expired, $stok, $modal, $harga_jual, $keuntungan, $image_File['url'])) {
+                            echo "Berhasil Hore Hore";
+                            exit();
+                        } else {
+                            echo "Yah Gagal";
+                            exit();
+                        }
+                    }
+                } else {
+                    $image_File = $image->ImageUpload($_FILES['gambar'], $path_Image, $URL_Path);
+
+                    if ($image_File == null) {
+                        ?>
+                        <script>
+                            alert("Gambar kosong");
+                            window.location.href = "register-admin.php";
+                        </script>
+                        <?php   
+                    }
+                    if ($produk->AddVarian($nama, $varian, $expired, $stok, $modal, $harga_jual, $keuntungan, $image_File['url'])) {
+                        echo "Berhasil Hore";
+                        exit();
+                    } else {
+                        echo "Gagal nambah varian";
+                        exit();
+                    }
+                }
+            } else {
+                echo "Gagal ngapdet";
+                exit();
+            }
         } else {
             if ($produk->AddProduk($nama, $id_kategori, $deskripsi)) {
                 $image_File = $image->ImageUpload($_FILES['gambar'], $path_Image, $URL_Path);

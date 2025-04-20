@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
     <style>
         body {
-            background-color: #ffffff;
+            background-color: #F9EFDA;
         }
     </style>
 </head>
@@ -29,36 +29,36 @@
 
     <!-- Produk Section -->
     <div id="products" class="mt-10 mx-6">
-        <h2 class="text-4xl font-bold text-center mb-6 text-gray-800">Daftar Member Kami</h2>
+        <h2 class="text-4xl font-bold text-center mb-6 text-gray-800">Daftar Transaksi</h2>
 
         <div class="overflow-x-auto bg-white rounded-lg shadow-lg">
         <table class="min-w-full text-left text-gray-800 text-center text-wrap">
             <thead class="bg-[#E7B548] text-white">
                 <tr>
-                    <th class="px-2 py-2 font-medium text-[clamp(0.45rem,1vw,1rem)]">ID</th>
-                    <th class="px-2 py-2 font-medium text-[clamp(0.45rem,1vw,1rem)]">Tanggal Pembelian</th>
-                    <th class="px-2 py-2 font-medium text-[clamp(0.45rem,1vw,1rem)]">Total Harga</th>
-                    <th class="px-2 py-2 font-medium text-[clamp(0.45rem,1vw,1rem)]">ID Admin</th>
-                    <th class="px-2 py-2 font-medium text-[clamp(0.45rem,1vw,1rem)]">Total Bayar</th>
-                    <th class="px-2 py-2 font-medium text-[clamp(0.45rem,1vw,1rem)]">Metode Pembayaran</th>
-                    <th class="px-2 py-2 font-medium text-[clamp(0.45rem,1vw,1rem)]">Kembalian</th>
-                    <th class="px-2 py-2 font-medium text-[clamp(0.45rem,1vw,1rem)]">Keuntungan</th>
-                    <th class="px-2 py-2 font-medium text-[clamp(0.45rem,1vw,1rem)]">Status</th>
-                    <th class="px-2 py-2 font-medium text-[clamp(0.45rem,1vw,1rem)]">Action</th>
+                    <th class="px-2 py-2 border border-gray-300 font-medium text-[clamp(0.45rem,1vw,1rem)]">ID</th>
+                    <th class="px-2 py-2 border border-gray-300 font-medium text-[clamp(0.45rem,1vw,1rem)]">Tanggal Pembelian</th>
+                    <th class="px-2 py-2 border border-gray-300 font-medium text-[clamp(0.45rem,1vw,1rem)]">Total Harga</th>
+                    <th class="px-2 py-2 border border-gray-300 font-medium text-[clamp(0.45rem,1vw,1rem)]">ID Admin</th>
+                    <th class="px-2 py-2 border border-gray-300 font-medium text-[clamp(0.45rem,1vw,1rem)]">Total Bayar</th>
+                    <th class="px-2 py-2 border border-gray-300 font-medium text-[clamp(0.45rem,1vw,1rem)]">Metode Pembayaran</th>
+                    <th class="px-2 py-2 border border-gray-300 font-medium text-[clamp(0.45rem,1vw,1rem)]">Kembalian</th>
+                    <th class="px-2 py-2 border border-gray-300 font-medium text-[clamp(0.45rem,1vw,1rem)]">Keuntungan</th>
+                    <th class="px-2 py-2 border border-gray-300 font-medium text-[clamp(0.45rem,1vw,1rem)]">Status</th>
+                    <th class="px-2 py-2 border border-gray-300 font-medium text-[clamp(0.45rem,1vw,1rem)]">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr class="border-b hover:bg-gray-50">
-                    <td class="px-2 py-2 text-[clamp(0.45rem,1vw,1rem)]">p</td>
-                    <td class="px-2 py-2 text-[clamp(0.45rem,1vw,1rem)]">p</td>
-                    <td class="px-2 py-2 text-[clamp(0.45rem,1vw,1rem)]">p</td>
-                    <td class="px-2 py-2 text-[clamp(0.45rem,1vw,1rem)]">p</td>
-                    <td class="px-2 py-2 text-[clamp(0.45rem,1vw,1rem)]">p</td>
-                    <td class="px-2 py-2 text-[clamp(0.45rem,1vw,1rem)]">p</td>
-                    <td class="px-2 py-2 text-[clamp(0.45rem,1vw,1rem)]">p</td>
-                    <td class="px-2 py-2 text-[clamp(0.45rem,1vw,1rem)]">p</td>
-                    <td class="px-2 py-2 text-[clamp(0.45rem,1vw,1rem)]">p</td>
-                    <td class="px-2 py-2 text-[clamp(0.45rem,1vw,1rem)] flex justify-evenly">
+                    <td class="px-2 py-2 border border-gray-300 text-[clamp(0.45rem,1vw,1rem)]">p</td>
+                    <td class="px-2 py-2 border border-gray-300 text-[clamp(0.45rem,1vw,1rem)]">p</td>
+                    <td class="px-2 py-2 border border-gray-300 text-[clamp(0.45rem,1vw,1rem)]">p</td>
+                    <td class="px-2 py-2 border border-gray-300 text-[clamp(0.45rem,1vw,1rem)]">p</td>
+                    <td class="px-2 py-2 border border-gray-300 text-[clamp(0.45rem,1vw,1rem)]">p</td>
+                    <td class="px-2 py-2 border border-gray-300 text-[clamp(0.45rem,1vw,1rem)]">p</td>
+                    <td class="px-2 py-2 border border-gray-300 text-[clamp(0.45rem,1vw,1rem)]">p</td>
+                    <td class="px-2 py-2 border border-gray-300 text-[clamp(0.45rem,1vw,1rem)]">p</td>
+                    <td class="px-2 py-2 border border-gray-300 text-[clamp(0.45rem,1vw,1rem)]">p</td>
+                    <td class="px-2 py-2 border border-gray-300 text-[clamp(0.45rem,1vw,1rem)] flex justify-evenly">
                         <a href="edit.php?id_admin=<?= $admin['f_id'] ?>" class="text-[clamp(0.45rem,1vw,4rem)] p-3 hover:bg-opacity-75 rounded-md w-max">
                             <i class="fa-solid fa-pen-to-square text-[#1B2ED6]"></i>
                         </a>

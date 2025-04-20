@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" &&
             ?>
             <script>
                 alert("Kategori sudah ada");
-                window.location.href = "register-admin.php";
+                window.location.href = "kategori.php";
             </script>
             <?php
         }
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" &&
             ?>
             <script>
                 alert("Gambar kosong");
-                window.location.href = "register-admin.php";
+                window.location.href = "kategori.php";
             </script>
             <?php	
         }
@@ -44,14 +44,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" &&
             ?>
             <script>
                 alert("Kategori berhasil ditambahkan");
-                window.location.href = "register-admin.php";
+                window.location.href = "kategori.php";
             </script>
             <?php
         } else {
             ?>
             <script>
                 alert("Kategori gagal ditambahkan");
-                window.location.href = "register-admin.php";
+                window.location.href = "kategori.php";
             </script>
             <?php
         }

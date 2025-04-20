@@ -15,14 +15,6 @@
                 <label class="block text-sm font-bold mb-2" for="username">USERNAME</label>
                 <input class="w-full px-3 py-2 border border-black rounded" type="text" id="username" name="username" required value="<?= $admin_Data['username']?>">
             </div>
-            <div class="mb-4">
-                <label class="block text-sm font-bold mb-2" for="email">EMAIL</label>
-                <input class="w-full px-3 py-2 border border-black rounded" type="email" id="email" name="email" required value="<?= $admin_Data['email']?>">
-            </div>
-            <div class="mb-4">
-                <label class="block text-sm font-bold mb-2" for="gambar">GAMBAR</label>
-                <input name="gambar" type="file" id="gambar" class="w-full px-3 py-2 border border-black rounded"></input>
-            </div>
             <div class="text-center">
                 <button class="bg-[#E7B548] text-white font-bold py-2 px-4 rounded-md w-full mb-2" type="submit">EDIT</button>
             </div>

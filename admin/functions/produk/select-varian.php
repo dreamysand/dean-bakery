@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" &&
 	$table_varian = "detail_produk";
 	$produk = new Produk();
 
-	$varians_Data = $produks->SelectVarian($id_produk);
+	$varians_Data = $produks->SelectVarians($id_produk);
 	if ($varians_Data != null) {
 		?>
 		<script>

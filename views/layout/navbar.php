@@ -1,21 +1,28 @@
 <nav class="bg-[#101018] text-white p-4 fixed top-0 left-0 right-0 z-[997]">
     <div class="flex justify-between items-center">
         <img src="<?php echo "http://".$_SERVER['HTTP_HOST'].DIRECTORY_SEPARATOR."dean-bakery\assets".DIRECTORY_SEPARATOR."logo.png"; ?>" class="w-[7vh] bg-[#E7B548] rounded-xl">
-        <button id="sidebarToggle" class="text-white">
-            <!-- Icon Burger Menu -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-            </svg>
-        </button>
+
+        <?php if (isset($_SESSION['admin'])): ?>
+            <button id="sidebarToggle" class="text-white">
+                <!-- Icon Burger Menu -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        <?php else: ?>
+            <?php include __DIR__.DIRECTORY_SEPARATOR."navbar-variants".DIRECTORY_SEPARATOR."unlogined.php"; ?>
+        <?php endif ?>
     </div>
 </nav>
 <div id="overlay"></div>
+<?php if (isset($_SESSION['admin'])): ?>
 <aside id="sidebar" class="fixed top-0 left-0 h-full bg-[#101018] text-white p-6">
     <nav>
         <?php include __DIR__.DIRECTORY_SEPARATOR."navbar-variants".DIRECTORY_SEPARATOR."admin.php"; ?>
     </nav>
 </aside>
+<?php endif ?>
 
 <style>
     #sidebar {
