@@ -66,6 +66,13 @@
                 <?php endforeach ?>
             </tbody>
         </table>
+        <div class="w-full flex justify-center">
+        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+            <a href="?page=<?php echo $i ?>" class="px-2 py-1 border <?php echo $i == $page ? 'bg-[#E7B548] text-white' : '' ?>">
+                <?php echo $i ?>
+            </a>
+        <?php endfor; ?>
+        </div>
         </div>
     </div>
     <script>

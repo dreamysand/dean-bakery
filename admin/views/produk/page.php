@@ -33,8 +33,28 @@
 
         <!-- Container untuk produk dengan overflow-x -->
         <div class="flex justify-between mt-[5rem] items-end">
-            <h3 class="text-[2.5rem] font-bold text-gray-800">Roti</h3>
-            <h3 class="text-[1.5rem] font-bold text-[#E7B548] underline"><a href="">Lihat Semuanya</a></h3>
+            <div class="mb-6 flex items-center absolute right-6 bg-[#E7B548] px-4 py-2 rounded text-white mt-2 mr-2">
+              <form method="GET" action="" class="flex items-center space-x-2 text-sm text-white">
+                <!-- id_kategori -->
+                <?php
+                $table = "kategori";
+                $kategori = new Kategori();
+                $list_kategori = $kategori->SelectKategoris();
+                ?>
+                <label for="id_kategori" class="mr-1">Kategori:</label>
+                <select name="id_kategori" id="id_kategori" class="text-black rounded px-1 py-1">
+                    <option value="" selected>Pilih Kategori</option>
+                    <?php foreach ($list_kategori as $kategori): ?>
+                        <option value="<?php echo $kategori['id_kategori'] ?>"><?php echo $kategori['kategori'] ?></option>
+                    <?php endforeach ?>
+                </select>
+                <!-- Tombol -->
+                <button type="submit" class="ml-3 bg-white text-[#E7B548] px-3 py-1 rounded hover:bg-gray-200">Tampilkan</button>
+                <button type="button" onclick="window.location.href='produk.php'" class="ml-3 bg-white text-[#E7B548] px-3 py-1 rounded hover:bg-gray-200">Reset</button>
+              </form>
+            </div>
+            <button type="button" onclick="window.location.href='add.php?produk'" class="ml-3 bg-[#E7B548] text-white px-3 py-1 rounded">Tambah Produk</button>
+
         </div>
         
         <div class="overflow-x-auto p-4">
@@ -60,7 +80,7 @@
                     }
                     ?>
                     <?php foreach ($varians as $varian): ?>
-                        <div class="bg-white p-6 w-[300px] flex-none rounded-lg shadow-lg transform hover:scale-105 transition ease-in-out duration-300 cursor-pointer border border-gray-200">
+                        <div class="bg-white p-6 w-[300px] flex-none rounded-lg shadow-lg transform hover:scale-105 transition ease-in-out duration-300 border border-gray-200">
                             <img src="<?php echo $varian['gambar'] ?>" alt="Produk 1" class="h-[200px] w-full object-cover mb-4 rounded-md">
                             <?php
                             $kode = $varian['kode_bar'];
@@ -76,17 +96,43 @@
                                 <?php echo $varian['varian'] ?>
                             </p>
                             <p class="text-center">Rp <?php echo number_format($varian['harga_jual'], 0, ',', '.') ?></p>
-                            <div class="flex justify-evenly mt-3">
-                                <a href="" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
-                                    <i class="fa-solid fa-pen-to-square text-[#1B2ED6]"></i>
-                                </a>
-                                <a href="#" onclick="addToCart(<?= $produk['id_produk']; ?>, <?= $varian['id']; ?>)" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
-                                    <i class="fa-solid fa-cart-shopping text-[#006E2A]"></i>
-                                </a>
-                                <a href="" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
-                                    <i class="fa-solid fa-trash-can text-[#FF0909]"></i>
-                                </a>
+                            <p class="text-center text-gray-800">Expired : <?php echo $varian['tanggal_expired']; ?></p>
+                            <div class="flex justify-center items-center space-x-2 my-2">
+                                <button onclick="updateStok(<?= $produk['id_produk'] ?>, <?= $varian['id'] ?>, -1)" class="bg-gray-200 hover:bg-gray-300 text-black px-2 py-1 rounded-md text-lg">-</button>
+                                <span data-stok data-id-produk="<?php echo $produk['id_produk'] ?>" data-id-varian="<?php echo $varian['id'] ?>" id="stok_<?= $varian['id'] ?>" class="text-lg font-semibold text-gray-800"><?php echo $varian['stok']; ?></span>
+                                <button onclick="updateStok(<?= $produk['id_produk'] ?>, <?= $varian['id'] ?>, 1)" class="bg-gray-200 hover:bg-gray-300 text-black px-2 py-1 rounded-md text-lg">+</button>
                             </div>
+                            <?php if (date("Y-m-d") > $varian['tanggal_expired']): ?>
+                                <p class="text-center text-red-800">Expired</p>
+                                <div class="flex justify-evenly mt-3 relative z-[900]">
+                                    <a href="#" onclick="editProduk(<?php echo $produk['id_produk'] ?>, <?php echo $varian['id'] ?>)" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
+                                        <i class="fa-solid fa-pen-to-square text-[#1B2ED6]"></i>
+                                    </a>
+                                    <a href="#" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
+                                        <i class="fa-solid fa-trash-can text-[#FF0909]"></i>
+                                    </a>
+                                    <a href="detail-produk.php?id_produk=<?php echo $produk['id_produk'] ?>&id_varian=<?php echo $varian['id'] ?>" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
+                                        <i class="fa-solid fa-circle-info text-[#000000]"></i>
+                                    </a>
+                                </div>
+                            <?php else: ?>
+                                <div class="flex justify-evenly mt-3">
+                                    <a href="#" onclick="editProduk(<?php echo $produk['id_produk'] ?>, <?php echo $varian['id'] ?>)" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
+                                        <i class="fa-solid fa-pen-to-square text-[#1B2ED6]"></i>
+                                    </a>
+                                    <?php if ($varian['stok'] > 0): ?>
+                                    <a href="#" data-cart-btn data-id-produk='<?php echo $produk['id_produk'] ?>' data-id-varian='<?php echo $varian['id'] ?>' onclick="addToCart(<?= $produk['id_produk']; ?>, <?= $varian['id']; ?>)" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
+                                        <i class="fa-solid fa-cart-shopping text-[#006E2A]"></i>
+                                    </a>
+                                    <?php endif ?>
+                                    <a href="#" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
+                                        <i class="fa-solid fa-trash-can text-[#FF0909]"></i>
+                                    </a>
+                                    <a href="detail-produk.php?id_produk=<?php echo $produk['id_produk'] ?>&id_varian=<?php echo $varian['id'] ?>" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
+                                        <i class="fa-solid fa-circle-info text-[#000000]"></i>
+                                    </a>
+                                </div>
+                            <?php endif ?>
                         </div>
                     <?php endforeach ?>
                 <?php endforeach ?>
@@ -101,6 +147,64 @@
     <script>
         const data_produk = <?php echo json_encode($data_produk); ?>;
         console.log(data_produk);
+        
+        function checkStok() {
+            const stokSpans = document.querySelectorAll(`span[data-stok][data-id-produk][data-id-varian]`);
+            stokSpans.forEach((span) => {
+                const id_produk = span.getAttribute('data-id-produk');
+                const id_varian = span.getAttribute('data-id-varian');
+                const cartbtn = document.querySelector(`a[data-cart-btn][data-id-produk='${id_produk}'][data-id-varian='${id_varian}']`);
+                if (!cartbtn) return;
+
+                if (span.innerText <= 0) {
+                    cartbtn.classList.add("hidden");
+                } else {
+                    cartbtn.classList.remove("hidden");
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            checkStok();
+
+            const targetNode = document.getElementById("products");
+
+            const observer = new MutationObserver(() => {
+                checkStok();
+            });
+
+            observer.observe(targetNode, {
+                childList: true,
+                subtree: true,
+                characterData: true,
+            });
+        });
+        function updateStok(id_produk, id_varian, change) {
+            const stokSpan = document.querySelector(`span[data-stok][data-id-produk='${id_produk}'][data-id-varian='${id_varian}']`);
+            let currentStok = parseInt(stokSpan.innerText);
+
+            if (change === -1 && currentStok <= 0) return;
+
+            const newStok = currentStok + change;
+            stokSpan.innerText = newStok;
+
+            const formData = new FormData();
+            formData.append("id_produk", id_produk);
+            formData.append("id_varian", id_varian);
+            formData.append("stok", newStok);
+
+            fetch('produk.php?updatestok', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(result => {
+                console.log("ping");
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        }
         function addToCart(id_produk, id_varian) {
             let form = document.createElement("form");
             form.method = "POST";
@@ -154,6 +258,42 @@
             form.appendChild(tanggal_expired_input);
             form.appendChild(gambar_input);
             form.appendChild(stok_input);
+            document.body.appendChild(form);
+            form.submit();
+        }
+        function confirmDelete(id) {
+            if (confirm("Apakah anda yakin menghapus produk ini?")) {
+                let form = document.createElement("form");
+                form.method = "POST";
+                form.action = "delete.php?produk";
+
+                let input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "id_produk";
+                input.value = id;
+
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+        function editProduk(id, idv) {
+            let form = document.createElement("form");
+            form.method = "POST";
+            form.action = "edit.php?produk";
+
+            let input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "id_produk";
+            input.value = id;
+
+            let input_var = document.createElement("input");
+            input_var.type = "hidden";
+            input_var.name = "id_varian";
+            input_var.value = idv;
+
+            form.appendChild(input);
+            form.appendChild(input_var);
             document.body.appendChild(form);
             form.submit();
         }

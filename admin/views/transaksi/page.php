@@ -318,7 +318,7 @@
                 .then(response => response.text())
                 .then(data => {
                     console.log("Respon dari server:", data);
-                    window.location.href="invoice.php";
+                    // window.location.href="invoice.php";
                 })
                 .catch(error => {
                     console.error("Error:", error);

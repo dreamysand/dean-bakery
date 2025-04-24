@@ -108,6 +108,9 @@
                 <button onclick="downloadInvoice()" class="bg-blue-600 text-white px-4 py-2 mt-4 rounded hover:bg-blue-700">
                     Download Invoice PDF
                 </button>
+                <button onclick="sendWa()" class="bg-yellow-600 text-white px-4 py-2 mt-4 rounded hover:bg-yellow-700">
+                    Send To Wa
+                </button>
             </div>
         </div>
     </div>
@@ -129,6 +132,16 @@
                     window.open(url); // tampilkan PDF
                     window.location.href = 'invoice.php';
             });
+
+            setInterval(() => {
+                isprint = false;
+            }, 100);
+        }
+
+        function sendWa() {
+            isprint = true;
+
+            fetch('invoice.php?sendwa')
 
             setInterval(() => {
                 isprint = false;

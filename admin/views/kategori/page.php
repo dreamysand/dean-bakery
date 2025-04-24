@@ -43,14 +43,21 @@
                     <div class="bg-white p-6 w-[300px] flex-none rounded-lg shadow-lg transform hover:scale-105 transition ease-in-out duration-300 cursor-pointer border border-gray-200" onclick="window.location.href='table.php?type=obat&id=<?php echo $row['id']; ?>&page=<?php echo $page; ?>'">
                         <img src="<?php echo $kategori['gambar'] ?>" alt="Produk 1" class="h-[200px] w-full object-cover mb-4 rounded-md">
                         <h3 class="text-xl font-semibold text-center text-gray-800"><?php echo $kategori['kategori'] ?></h3>
+                        <?php
+                        $table_produk = "produk";
+                        $total_prod = $kategoris->CountProduk($kategori['id_kategori']);
+                        ?>
+                        <h3 class="text-md font-semibold text-center text-gray-800"><?php echo $total_prod ? $total_prod : 0 ?> Produk</h3>
                         <!-- <p class="text-center">100 Produk</p> -->
                         <div class="flex justify-evenly mt-3">
                             <a href="#" onclick="editKategori(<?=$kategori['id_kategori'] ?>)" class="text-[clamp(0.45rem,1vw,4rem)] p-3 hover:bg-opacity-75 rounded-md w-max">
                                 <i class="fa-solid fa-pen-to-square text-[#1B2ED6]"></i>
                             </a>
+                            <?php if ($total_prod <= 0): ?>
                             <a href="#" onclick="confirmDelete(<?=$kategori['id_kategori'] ?>)" class="text-[clamp(0.45rem,1vw,4rem)] p-3 hover:bg-opacity-75 rounded-md w-max">
                                 <i class="fa-solid fa-trash-can text-[#FF0909]"></i>
                             </a>
+                            <?php endif ?>
                         </div>
                     </div>
                 <?php endforeach ?>

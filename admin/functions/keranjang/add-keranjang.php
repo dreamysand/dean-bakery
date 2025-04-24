@@ -19,10 +19,19 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" &&
 	$stok = htmlspecialchars($_POST['stok']);
 
 	$cart = isset($_SESSION['cart']) ? unserialize($_SESSION['cart']) : new Cart();
-	$cart->AddItems($id_produk, $id_varian, $nama_produk, $varian, $harga_jual, $jumlah, $tanggal_expired, $gambar, $stok);
-	$_SESSION['cart'] = serialize($cart);
 
-	header("Location: keranjang.php");
-	exit();
+	if (count($cart) <= 10) {
+		$cart->AddItems($id_produk, $id_varian, $nama_produk, $varian, $harga_jual, $jumlah, $tanggal_expired, $gambar, $stok);
+		$_SESSION['cart'] = serialize($cart);
+
+		header("Location: keranjang.php");
+		exit();		
+	} else {
+		?>
+		<script>
+			alert("Keranjang sudah penuh");
+		</script>
+		<?php
+	}
 }
 ?>

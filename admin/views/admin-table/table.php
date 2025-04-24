@@ -42,7 +42,7 @@
                     <th class="px-2 py-2 border border-gray-300 font-medium text-[clamp(0.45rem,1vw,1rem)]">Email</th>
                     <th class="px-2 py-2 border border-gray-300 font-medium text-[clamp(0.45rem,1vw,1rem)]">Password</th>
                     <th class="px-2 py-2 border border-gray-300 font-medium text-[clamp(0.45rem,1vw,1rem)]">Status</th>
-                    <th class="px-2 py-2 border border-gray-300 font-medium text-[clamp(0.45rem,1vw,1rem)]">Safety Quest</th>
+                    <th class="px-2 py-2 border border-gray-300 font-medium text-[clamp(0.45rem,1vw,1rem)]">Last Activity</th>
                     <th class="px-2 py-2 border border-gray-300 font-medium text-[clamp(0.45rem,1vw,1rem)]">Action</th>
                 </tr>
             </thead>
@@ -54,7 +54,7 @@
                         <td class="px-2 py-2 border border-gray-300 text-[clamp(0.45rem,1vw,1rem)]"><?= $admin['email']?></td>
                         <td class="px-2 py-2 border border-gray-300 text-[clamp(0.45rem,1vw,1rem)]"><?= $admin['password']?></td>
                         <td class="px-2 py-2 border border-gray-300 text-[clamp(0.45rem,1vw,1rem)]"><?= $admin['status']?></td>
-                        <td class="px-2 py-2 border border-gray-300 text-[clamp(0.45rem,1vw,1rem)]">p</td>
+                        <td class="px-2 py-2 border border-gray-300 text-[clamp(0.45rem,1vw,1rem)]"><?= $admin['last_login']?></td>
                         <td class="px-2 py-2 border border-gray-300 text-[clamp(0.45rem,1vw,1rem)] flex justify-evenly">
                             <a href="#" onclick="editAdmin(<?=$admin['id'] ?>)" class="text-[clamp(0.45rem,1vw,4rem)] p-3 hover:bg-opacity-75 rounded-md w-max">
                                 <i class="fa-solid fa-pen-to-square text-[#1B2ED6]"></i>
@@ -67,6 +67,13 @@
                 <?php endforeach ?>
             </tbody>
         </table>
+        <div class="w-full flex justify-center">
+        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+            <a href="?page=<?php echo $i ?>" class="px-2 py-1 border <?php echo $i == $page ? 'bg-[#E7B548] text-white' : '' ?>">
+                <?php echo $i ?>
+            </a>
+        <?php endfor; ?>
+        </div>
         </div>
     </div>
     

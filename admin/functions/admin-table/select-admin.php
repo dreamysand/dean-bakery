@@ -3,7 +3,16 @@ $table = "admin";
 $admin = unserialize($_SESSION['admin']);
 $admin_Data = $admin->GetAdminData();
 $admins = new Account();
-$admins_Data = $admins->GetAdminsData($admin_Data['id']);
+
+$limit = 1;
+$page = isset($_GET['page']) && !empty($_GET['page']) ? $_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
+$total_rows = $admins->CountAdmins($admin_Data['id']); 
+$total_pages = ceil($total_rows/$limit);
+
+$admins_Data = $admins->GetAdminsDataWithLimitOffset($admin_Data['id'], $limit, $offset);
+$admins_Data_All = $admins->GetAdminsData($admin_Data['id']);
 
 if ($admins_Data != null) {
 	?>
@@ -11,7 +20,7 @@ if ($admins_Data != null) {
 		console.log("Tabel admin berhasil diambil");
 	</script>
 	<?php 	
-	foreach ($admins_Data as $admin_data) {
+	foreach ($admins_Data_All as $admin_data) {
 		$last_login_verify = $admins->CheckActiveTime($admin_data['id']);
 
 		if ($last_login_verify) {

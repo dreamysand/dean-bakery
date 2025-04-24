@@ -389,6 +389,26 @@ class Account
 		$stmt = null;
 	}
 
+	function CountAdmins($id_admin)
+	{
+		global $config, $table;
+		$sql_Check_Query = "SELECT COUNT(*)
+		FROM $table
+		WHERE id != :id_admin";
+
+		$stmt = $config->prepare($sql_Check_Query);
+		if ($stmt->execute([
+			":id_admin" => $id_admin
+		])) {
+			if ($column = $stmt->fetchColumn()) {
+				return $column;
+			} else {
+				return null;
+			}
+		}
+		$stmt = null;
+	}
+
 	function GetAdminData()
 	{
 		$admin_Data = [
@@ -412,6 +432,29 @@ class Account
 		if ($stmt->execute([
 			"id_admin" => $id_admin
 		])) {
+			if ($result = $stmt->fetchAll(PDO::FETCH_ASSOC)) {
+				return $result;
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
+		$stmt = null;
+	}
+
+	function GetAdminsDataWithLimitOffset($id_admin, $limit, $offset)
+	{
+		global $config, $table;
+		$sql_Select_Query = "SELECT *
+		FROM $table WHERE id != :id_admin
+		LIMIT :limit OFFSET :offset";
+
+		$stmt = $config->prepare($sql_Select_Query);
+		$stmt->bindValue(':id_admin', (int)$id_admin, PDO::PARAM_INT);
+		$stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+		$stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);		
+		if ($stmt->execute()) {
 			if ($result = $stmt->fetchAll(PDO::FETCH_ASSOC)) {
 				return $result;
 			} else {
@@ -721,6 +764,31 @@ class Produk
 		$stmt = null;
 	}
 
+	function CheckProdukDuplication($nama_produk, $id_produk)
+	{
+		global $config, $table_produk;
+		$sql_Check_Query = "SELECT COUNT(*) 
+		FROM $table_produk
+		WHERE
+		nama_produk = :nama_produk
+		AND
+		id_produk != :id_produk";
+
+		$stmt = $config->prepare($sql_Check_Query);
+		if ($stmt->execute([
+			":nama_produk" => $nama_produk,
+			":id_produk" => $id_produk
+		])) {
+			$column = $stmt->fetchColumn();
+			if ($column > 0) {
+				return $column;
+			} else {
+				return null;
+			}
+		}
+		$stmt = null;
+	}
+
 	function CheckVarian($varian, $nama_produk)
 	{
 		global $config, $table_produk, $table_varian;
@@ -761,6 +829,34 @@ class Produk
 		$stmt = null;
 	}
 
+	function CheckVarianDuplication($varian, $id_varian, $id_produk)
+	{
+		global $config, $table_produk, $table_varian;
+		$sql_Check_Query = "SELECT COUNT(*)
+		FROM $table_varian
+		WHERE
+		varian = :varian
+		AND
+		fid_produk = :id_produk
+		AND
+		id != :id_varian";
+
+		$stmt = $config->prepare($sql_Check_Query);
+		if ($stmt->execute([
+			":varian" => $varian,
+			":id_produk" => $id_produk,
+			":id_varian" => $id_varian
+		])) {
+			$column = $stmt->fetchColumn();
+			if ($column > 0) {
+				return $column;
+			} else {
+				return null;
+			}
+		}
+		$stmt = null;
+	}
+
 	function SelectProduks()
 	{
 		global $config, $table_produk;
@@ -768,6 +864,22 @@ class Produk
 
 		$stmt = $config->prepare($sql_Select_Query);
 		if ($stmt->execute()) {
+			$result_Produk = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			return $result_Produk;
+		} else {
+			return null;
+		}
+	}
+
+	function SelectProduksByKategori($id_kategori)
+	{
+		global $config, $table_produk;
+		$sql_Select_Query = "SELECT * FROM $table_produk WHERE fid_kategori = :id_kategori";
+
+		$stmt = $config->prepare($sql_Select_Query);
+		if ($stmt->execute([
+			":id_kategori" => $id_kategori
+		])) {
 			$result_Produk = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			return $result_Produk;
 		} else {
@@ -813,7 +925,7 @@ class Produk
 	{
 		if (!is_null($id_produk) && is_null($nama_produk)) {
 			return $this->SelectProduk1($id_produk);
-		} elseif (!is_null($nama_produk) && is_null($nama_produk)) {
+		} elseif (!is_null($nama_produk) && is_null($id_produk)) {
 			return $this->SelectProduk2($nama_produk);
 		} else {
 			return null;
@@ -1038,7 +1150,7 @@ class Produk
 		$stmt = null;
 	}
 
-	function AddVarian($nama_produk, $varian, $tanggal_expired, $stok, $modal, $harga_jual, $keuntungan, $gambar)
+	function AddVarian($nama_produk, $varian, $tanggal_expired, $stok, $modal, $harga_jual, $keuntungan, $gambar, $kode_bar)
 	{
 		global $config, $table_produk, $table_varian;
 		$sql_Select_Query = "SELECT id_produk 
@@ -1062,7 +1174,8 @@ class Produk
 					modal,
 					harga_jual,
 					keuntungan_per_produk,
-					gambar)
+					gambar,
+					kode_bar)
 				VALUES
 				(:id_produk,
 					:varian,
@@ -1071,7 +1184,8 @@ class Produk
 					:modal,
 					:harga_jual,
 					:keuntungan,
-					:gambar)";
+					:gambar,
+					:kode_bar)";
 
 				$stmt = $config->prepare($sql_Add_Query);
 				if ($stmt->execute([
@@ -1082,7 +1196,8 @@ class Produk
 					"modal" => $modal,
 					"harga_jual" => $harga_jual,
 					"keuntungan" => $keuntungan,
-					":gambar" => $gambar
+					":gambar" => $gambar,
+					":kode_bar" => $kode_bar
 				])) {
 					return true;
 				} else {
@@ -1100,7 +1215,7 @@ class Produk
 		SET
 		nama_produk = :nama_produk,
 		fid_kategori = :id_kategori,
-		deskripsi = :deskripsi,
+		deskripsi = :deskripsi
 		WHERE
 		id_produk = :id_produk";
 
@@ -1118,7 +1233,7 @@ class Produk
 		$stmt = null;
 	}
 
-	function UpdateVarian($id_varian, $varian, $tanggal_expired, $stok, $modal, $harga_jual, $keuntungan, $gambar)
+	function UpdateVarianA($id_varian, $varian, $tanggal_expired, $stok, $modal, $harga_jual, $keuntungan, $gambar)
 	{
 		global $config, $table_varian;
 		$sql_Update_Query = "UPDATE $table_varian
@@ -1151,12 +1266,110 @@ class Produk
 		$stmt = null;
 	}
 
-	function UpdateStokAfterTransaksi($jumlah, $id_varian)
+	function UpdateVarianB($id_varian, $varian, $tanggal_expired, $stok, $modal, $harga_jual, $keuntungan, $gambar)
+	{
+		global $config, $table_varian;
+		$sql_Update_Query = "UPDATE $table_varian
+		SET
+		varian = :varian,
+		tanggal_expired = :tanggal_expired,
+		stok = :stok,
+		modal = :modal,
+		harga_jual = :harga_jual,
+		keuntungan_per_produk = :keuntungan,
+		gambar = :gambar
+		WHERE
+		id = :id_varian";
+
+		$stmt = $config->prepare($sql_Update_Query);
+		if ($stmt->execute([
+			":varian" => $varian,
+			":tanggal_expired" => $tanggal_expired,
+			":stok" => $stok,
+			":modal" => $modal,
+			":harga_jual" => $harga_jual,
+			":keuntungan" => $keuntungan,
+			":gambar" => $gambar,
+			":id_varian" => $id_varian
+		])) {
+			return true;
+		} else {
+			return false;
+		}
+		$stmt = null;
+	}
+
+	function UpdateStok($id_varian, $id_produk, $stok)
+	{
+		global $config, $table_varian;
+		$sql_Update_Query = "UPDATE $table_varian
+		SET
+		stok = :stok
+		WHERE
+		id = :id_varian
+		AND
+		fid_produk = :id_produk";
+
+		$stmt = $config->prepare($sql_Update_Query);
+		if ($stmt->execute([
+			":stok" => $stok,
+			":id_varian" => $id_varian,
+			":id_produk" => $id_produk
+		])) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	function SubtractStok($jumlah, $id_varian)
 	{
 		global $config, $table_varian;
 		$sql_Update_Query = "UPDATE $table_varian
 		SET
 		stok = stok - :jumlah
+		WHERE
+		id = :id_varian";
+
+		$stmt = $config->prepare($sql_Update_Query);
+		if ($stmt->execute([
+			":jumlah" => $jumlah,
+			":id_varian" => $id_varian
+		])) {
+			return true;
+		} else {
+			return false;
+		}
+		$stmt = null;
+	}
+
+	function AddStok($jumlah, $id_varian)
+	{
+		global $config, $table_varian;
+		$sql_Update_Query = "UPDATE $table_varian
+		SET
+		stok = stok + :jumlah
+		WHERE
+		id = :id_varian";
+
+		$stmt = $config->prepare($sql_Update_Query);
+		if ($stmt->execute([
+			":jumlah" => $jumlah,
+			":id_varian" => $id_varian
+		])) {
+			return true;
+		} else {
+			return false;
+		}
+		$stmt = null;
+	}
+
+	function AddSold($jumlah, $id_varian)
+	{
+		global $config, $table_varian;
+		$sql_Update_Query = "UPDATE $table_varian
+		SET
+		terjual = terjual + :jumlah
 		WHERE
 		id = :id_varian";
 
@@ -1260,6 +1473,28 @@ class Kategori
 		])) {
 			if ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
 				return $result;
+			} else {
+				return null;
+			}
+		}
+		$stmt = null;
+	}
+
+	function CountProduk($id_kategori)
+	{
+		global $config, $table_produk;
+		$sql_Check_Query = "SELECT COUNT(*) FROM
+		$table_produk
+		WHERE
+		fid_kategori = :id_kategori";
+
+		$stmt = $config->prepare($sql_Check_Query);
+		if ($stmt->execute([
+			":id_kategori" => $id_kategori
+		])) {
+			$column = $stmt->fetchColumn();
+			if ($column > 0) {
+				return $column;
 			} else {
 				return null;
 			}
@@ -1377,6 +1612,24 @@ class Member
 		$stmt = null;
 	}
 
+	function CountMembers()
+	{
+		global $config, $table;
+		$sql_Check_Query = "SELECT COUNT(*)
+		FROM $table";
+
+		$stmt = $config->prepare($sql_Check_Query);
+		if ($stmt->execute()) {
+			$column = $stmt->fetchColumn();
+			if ($column > 0) {
+				return $column;
+			} else {
+				return null;
+			}
+		}
+		$stmt = null;
+	}
+
 	function AddMember($nama, $no_telp)
 	{
 		global $config, $table;
@@ -1424,6 +1677,24 @@ class Member
 		$sql_Select_Query = "SELECT * FROM $table";
 
 		$stmt = $config->prepare($sql_Select_Query);
+		if ($stmt->execute()) {
+			if ($result = $stmt->fetchAll(PDO::FETCH_ASSOC)) {
+				return $result;
+			} else {
+				return null;
+			}
+		}
+		$stmt = null;
+	}
+
+	function SelectMembersWithOffsetLimit($limit, $offset)
+	{
+		global $config, $table;
+		$sql_Select_Query = "SELECT * FROM $table LIMIT :limit OFFSET :offset";
+
+		$stmt = $config->prepare($sql_Select_Query);
+		$stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+		$stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
 		if ($stmt->execute()) {
 			if ($result = $stmt->fetchAll(PDO::FETCH_ASSOC)) {
 				return $result;
@@ -1654,7 +1925,7 @@ class Member
 /**
  * 
  */
-class Cart
+class Cart implements Countable
 {
 	public array $cart = [];
 
@@ -1701,6 +1972,10 @@ class Cart
 			}	
 		}
 	}
+
+	function count(): int {
+        return count($this->cart);
+    }
 
 	function DeleteAllItems()
 	{
@@ -1803,6 +2078,7 @@ class Transaksi
 			":total_harga" => $total_harga,
 			":fid_admin" => $fid_admin,
 			":total_bayar" => $total_bayar,
+			":total_diskon" => $total_diskon,
 			":fid_metode_pembayaran" => $fid_metode_pembayaran,
 			":total_kembalian" => $total_kembalian,
 			":total_keuntungan" => $total_keuntungan,
@@ -1934,6 +2210,23 @@ class Laporan
 				return null;
 			}
 		}
+	}
+
+	function AddLaporan($total_modal, $total_penjualan, $total_keuntungan)
+	{
+		global $config, $table_laporan;
+
+		$sql_Add_Query = "INSERT INTO $table_laporan 
+		(
+			total_penjualan, 
+			total_modal, 
+			total_keuntungan
+		) VALUES (
+		:total_penjualan, 
+		:total_modal, 
+		:total_keuntungan)";
+
+
 	}
 
 	function SelectLaporan($tahun, $bulan, $tanggal)

@@ -7,9 +7,13 @@ if (isset($_SESSION['invoice_data']) &&
 	isset($_GET['sendtodb'])
 ) {
 	$member = new Member();
+	$laporan = new Laporan();
 	$transaksi = isset($_SESSION['transaksi']) ? unserialize($_SESSION['transaksi']) : new Transaksi();
+	$produk = new Produk();
+
 	$table_varian = "detail_produk";
 	$table = "member";
+	$table_laporan = "laporan";
 	$table_transaksi = "transaksi";
 	$table_detail_transaksi = "detail_transaksi";
 
@@ -19,16 +23,14 @@ if (isset($_SESSION['invoice_data']) &&
 	$total_price = $data['total_price'];
 	$no_telp = $data['no_telp'];
 	$metode_pembayaran = $data['metode'];
-	$id_member = $data['id_member'];
+	$id_member = empty($data['id_member']) ? null : $data['id_member'];
 	$id_metode_pembayaran = $data['id_metode'];
 	$usage_point = $data['point_usage'];
 
 	$kode_unik_transaksi = bin2hex(random_bytes(5));
 	$_SESSION['invoice_data']['kode_unik'] = $kode_unik_transaksi;
 		
-	$produk = new Produk();
 	$total_keuntungan = 0;
-
 	foreach ($data['data'] as $item) {
 		$data_produk = $produk->SelectVarian($item['id_varian'], $item['id_produk'], null, null);
 		$total_keuntungan += $data_produk['keuntungan_per_produk'] * $item['jumlah'];
@@ -55,11 +57,17 @@ if (isset($_SESSION['invoice_data']) &&
 							}
 						}
 					}
-					if ( $member->UpdateActiveTime($id_member)) {
+					if ($member->UpdateActiveTime($id_member)) {
 						echo "Huraya";
 					}
 					if ($member->UpdateStatusMemberToActive($id_member)) {
 						echo "Hurayi";
+					}
+					if ($produk->SubtractStok($id_varian, $jumlah)) {
+						if ($produk->AddSold($id_varian, $jumlah)) {
+							echo "Hurayo";
+						}
+						echo "Hurayo";
 					}
 				} else {
 					echo "Oh SHite";
@@ -69,6 +77,9 @@ if (isset($_SESSION['invoice_data']) &&
 			}
 		} else {
 			if ($transaksi->SendToTableDetailTransaksi($kode_unik_transaksi, $id_varian, $id_member, $jumlah, $subtotal)) {
+				if ($produk->SubtractStok($id_varian, $jumlah)) {
+					echo "Hurayon";
+				}
 				echo "Omgshit";
 			} else {
 				echo "Oh Min";
@@ -208,16 +219,18 @@ if (isset($_SESSION['invoice_data']) &&
 		echo $output;
 
 		if (isset($_GET['sendwa'])) {
-			$token = 'wiq10sk3b9i4p4w9';
-			$instanceId = 'instance111688';
-			$phone = '088210266308'; // no WA tujuan
+			$tempFilePath = 'temp/' . uniqid() . '.pdf';
+			file_put_contents($tempFilePath, $output);
+			$token = 'gyf2hpa0eonzchsr';
+			$instanceId = 'instance107033';
+			$phone = '085717277864'; // no WA tujuan
 
 			$url = "https://api.ultramsg.com/$instanceId/messages/document";
 			$data = [
 			    'token' => $token,
 			    'to' => $phone,
 			    'filename' => 'invoice.pdf',
-			    'document' => ' https://82ae-114-10-31-241.ngrok-free.app/aca/kasir/' . $tempFilePath // Harus URL akses publik
+			    'document' => ' https://3cd5-114-79-5-231.ngrok-free.app/dean-bakery/admin/' . $tempFilePath // Harus URL akses publik
 			];
 
 			$ch = curl_init($url);
@@ -238,4 +251,5 @@ if (isset($_SESSION['invoice_data']) &&
 ) {
 	unset($_SESSION['invoice_data']);
 }
+print_r($_SESSION['transaksi']);
 ?>

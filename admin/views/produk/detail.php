@@ -18,30 +18,33 @@
     <?php include '../views/layout/navbar.php'; ?>
         <div class="overflow-x-auto p-4 mt-[10vh]">
             <div class="flex space-x-6 w-full">    
-                <div class="relative bg-white p-6 w-full flex rounded-lg shadow-lg transform transition ease-in-out duration-300 cursor-pointer border border-gray-200" onclick="window.location.href='table.php?type=obat&id=<?php echo $row['id']; ?>&page=<?php echo $page; ?>'">
+                <div class="relative bg-white p-6 w-full flex rounded-lg shadow-lg transform transition ease-in-out duration-300 border border-gray-200">
                     <div class="w-[20%]">
-                        <img src="../assets/roti-tawar.jpg" alt="Produk 1" class="aspect-[1/1] w-full object-cover mb-4 rounded-md">
+                        <img src="<?php echo $varian_Data['gambar'] ?>" alt="<?php echo $produk_Data['id_produk'].$varian_Data['id'] ?>" class="aspect-[1/1] w-full object-cover mb-4 rounded-md">
                     </div>
                     <div class="relative w-[80%]">
                         <div class="ml-[3vw] mt-5">
-                            <h3 class="text-xl font-semibold text-gray-800">Roti Tawar</h3>
-                            <p class="text-gray-500">Original</p> 
+                            <h3 class="text-xl font-semibold text-gray-800"><?php echo $produk_Data['nama_produk'] ?></h3>
+                            <p class="text-gray-500"><?php echo $varian_Data['varian'] ?></p> 
                         </div>
                         <div class="ml-[3vw] mb-6">
-                            <p>Rp 10.000</p>
-                            <p>Stok : Kosong</p>
+                            <p>Rp <?php echo number_format($varian_Data['harga_jual'], 0, ',', '.') ?></p>
+                            <p>Stok : <?php echo $varian_Data['stok'] ?></p>
                         </div>
                         <div class="ml-[3vw] w-[40%]">
-                            <p>Roti tawar yang dibuat dengan cinta dan kasih sayang. Roti tawar dengan kualitas terbaik, yang bahka sudah di setujui oleh PBB sebagai salah satu warisan dunia.</p>
+                            <p><?php echo $produk_Data['deskripsi'] ?></p>
                         </div>
-                    </div>
-                    <div class="mb-6 flex items-center absolute bottom-3 right-6">
-                        <a href="edit.php?id_admin=<?= $admin['f_id'] ?>" class="bg-[#E7B548] p-1 hover:bg-opacity-75 text-white rounded-md mr-4">
-                            <span class="hidden md:block">Edit Produk</span>
-                        </a>
-                        <a href="#" onclick="confirmDelete(<?=$admin['f_id'] ?>)" class="bg-[#CB2828] p-1 hover:bg-opacity-75 text-white rounded-md">
-                            <span class="hidden md:block">Hapus Produk</span>
-                        </a>
+                        <div class="ml-[3vw] w-[40%] mt-5">
+                            <?php
+                            $kode = $varian_Data['kode_bar'];
+
+                            $barcode = $generator->getBarcode($kode, $generator::TYPE_CODE_128);
+                            ?>
+                            <h3 class="text-xl font-semibold"><?= $barcode ?></h3>
+                            <p class="text-gray-800">
+                                <?php echo $kode ?>
+                            </p>  
+                        </div>
                     </div>
                 </div>
             </div>

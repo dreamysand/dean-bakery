@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" &&
                             </script>
                             <?php   
                         }
-                        if ($produk->UpdateVarian($id_varian, $varian, $expired, $stok, $modal, $harga_jual, $keuntungan, $image_File['url'])) {
+                        if ($produk->UpdateVarianA($id_varian, $varian, $expired, $stok, $modal, $harga_jual, $keuntungan, $image_File['url'])) {
                             echo "Berhasil Hore Hore";
                             exit();
                         } else {
@@ -78,7 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" &&
                         </script>
                         <?php   
                     }
-                    if ($produk->AddVarian($nama, $varian, $expired, $stok, $modal, $harga_jual, $keuntungan, $image_File['url'])) {
+                    $kode_bar = rand(10000000, 99999999);
+                    if ($produk->AddVarian($nama, $varian, $expired, $stok, $modal, $harga_jual, $keuntungan, $image_File['url'], $kode_bar)) {
                         echo "Berhasil Hore";
                         exit();
                     } else {
@@ -108,7 +109,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" &&
                     echo "Ping Ping";
                     exit();
                 } else {
-                    if ($produk->AddVarian($nama, $varian, $expired, $stok, $modal, $harga_jual, $keuntungan, $image_File['url'])) {
+                    $kode_bar = rand(10000000, 99999999);
+                    if ($produk->AddVarian($nama, $varian, $expired, $stok, $modal, $harga_jual, $keuntungan, $image_File['url'], $kode_bar)) {
                         echo "Berhasil Hore";
                         exit();
                     } else {

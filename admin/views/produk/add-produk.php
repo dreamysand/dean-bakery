@@ -23,19 +23,19 @@
             </div>
             <div class="mb-4">
                 <label class="block text-sm font-bold mb-2" for="stok">Stok</label>
-                <input class="w-full px-3 py-2 border border-black rounded" type="number" id="stok" name="stok" required>
+                <input class="w-full px-3 py-2 border border-black rounded" type="number" id="stok" name="stok" required oninput="updateKeuntungan()">
             </div>
             <div class="mb-4">
                 <label class="block text-sm font-bold mb-2" for="modal">Modal</label>
-                <input class="w-full px-3 py-2 border border-black rounded" type="number" id="modal" name="modal" required>
+                <input class="w-full px-3 py-2 border border-black rounded" type="number" id="modal" name="modal" required oninput="updateKeuntungan()">
             </div>
             <div class="mb-4">
                 <label class="block text-sm font-bold mb-2" for="harga_jual">Harga Jual</label>
-                <input class="w-full px-3 py-2 border border-black rounded" type="number" id="harga_jual" name="harga_jual" required>
+                <input class="w-full px-3 py-2 border border-black rounded" type="number" id="harga_jual" name="harga_jual" required oninput="updateKeuntungan()">
             </div>
             <div class="mb-4">
                 <label class="block text-sm font-bold mb-2" for="keuntungan">Keuntungan</label>
-                <input class="w-full px-3 py-2 border border-black rounded" type="number" id="keuntungan" name="keuntungan" required>
+                <input class="w-full px-3 py-2 border border-black rounded" type="number" id="keuntungan" name="keuntungan" required readonly>
             </div>
             <div class="mb-4">
                 <label class="block text-sm font-bold mb-2" for="id_kategori">Kategori</label>
@@ -67,5 +67,16 @@
             </div>
         </form>
     </div>
+    <script>
+        function updateKeuntungan() {
+            const stok = document.getElementById("stok");
+            const modal = document.getElementById("modal");
+            const harga_jual = document.getElementById("harga_jual");
+            const keuntungan = document.getElementById("keuntungan");
+
+            let keuntungan_per_produk = harga_jual.value - (modal.value / stok.value);
+            keuntungan.value = keuntungan_per_produk;  
+        }
+    </script>
 </body>
 </html>

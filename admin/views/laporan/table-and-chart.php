@@ -99,18 +99,10 @@
     <div class="grid grid-cols-2 gap-4 mt-6">
         <div class="w-full max-w-lg aspect-square mx-auto">
             <canvas id="chartKeuntungan" class="w-full h-full"></canvas>
-            <h2 class="px-2 py-2 text-center font-medium text-[clamp(0.45rem,1vw,1rem)]">Diagram Pie Penjualan Hari Ini</h2>
+            <h2 class="px-2 py-2 text-center font-medium text-[clamp(0.45rem,1vw,1rem)]">Diagram Pie Penjualan</h2>
         </div>
         <div class="w-full aspect-[16/9]">
             <div id="chartContainer" class="w-[80%] mx-auto h-full"></div>
-            <h2 class="px-2 py-2 text-center font-medium text-[clamp(0.45rem,1vw,1rem)]">Grafik Penjualan Minggu Ini</h2>
-        </div>
-        <div class="w-full aspect-[16/9]">
-            <div id="chartContainer2" class="w-[80%] mx-auto h-full"></div>
-            <h2 class="px-2 py-2 text-center font-medium text-[clamp(0.45rem,1vw,1rem)]">Grafik Penjualan Minggu Ini</h2>
-        </div>
-        <div class="w-full aspect-[16/9]">
-            <div id="chartContainer3" class="w-[80%] mx-auto h-full"></div>
             <h2 class="px-2 py-2 text-center font-medium text-[clamp(0.45rem,1vw,1rem)]">Grafik Penjualan Minggu Ini</h2>
         </div>
     </div>
@@ -144,61 +136,6 @@
             ]
         });
         chart1.render();
-
-        // Chart kedua
-        var chart2 = new CanvasJS.Chart("chartContainer2", {
-            title: {
-                text: "Grafik Modal & Keuntungan Minggu Ini"
-            },
-            axisY: {
-                title: "Jumlah (Rp)"
-            },
-            toolTip: {
-                shared: true
-            },
-            data: [
-                {
-                    type: "line",
-                    name: "Modal",
-                    showInLegend: true,
-                    dataPoints: <?php echo json_encode($modalPoints, JSON_NUMERIC_CHECK); ?>
-                },
-                {
-                    type: "line",
-                    name: "Keuntungan",
-                    showInLegend: true,
-                    dataPoints: <?php echo json_encode($keuntunganPoints, JSON_NUMERIC_CHECK); ?>
-                }
-            ]
-        });
-        chart2.render();
-
-        var chart3 = new CanvasJS.Chart("chartContainer3", {
-            title: {
-                text: "Grafik Modal & Keuntungan Minggu Ini"
-            },
-            axisY: {
-                title: "Jumlah (Rp)"
-            },
-            toolTip: {
-                shared: true
-            },
-            data: [
-                {
-                    type: "line",
-                    name: "Modal",
-                    showInLegend: true,
-                    dataPoints: <?php echo json_encode($modalPoints, JSON_NUMERIC_CHECK); ?>
-                },
-                {
-                    type: "line",
-                    name: "Keuntungan",
-                    showInLegend: true,
-                    dataPoints: <?php echo json_encode($keuntunganPoints, JSON_NUMERIC_CHECK); ?>
-                }
-            ]
-        });
-        chart3.render();
     }
     </script>
 
@@ -210,7 +147,7 @@
             data: {
                 labels: ['Modal', 'Penjualan'],
                 datasets: [{
-                    data: [<?= $total_modal_hari_ini ?>, <?= $total_penjualan_hari_ini ?>],
+                    data: [<?= $total_modal ?>, <?= $total_penjualan ?>],
                     backgroundColor: ['#D40909' ,'#20C10B']  
                 }]
             }
