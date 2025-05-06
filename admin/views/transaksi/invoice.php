@@ -108,9 +108,12 @@
                 <button onclick="downloadInvoice()" class="bg-blue-600 text-white px-4 py-2 mt-4 rounded hover:bg-blue-700">
                     Download Invoice PDF
                 </button>
+                <?php if (isset($_SESSION['invoice_data']['no_telp']) && !empty($_SESSION['invoice_data']['no_telp'])): ?>
+                <?php echo $_SESSION['invoice_data']['no_telp'] ?>
                 <button onclick="sendWa()" class="bg-yellow-600 text-white px-4 py-2 mt-4 rounded hover:bg-yellow-700">
                     Send To Wa
                 </button>
+                <?php endif ?>
             </div>
         </div>
     </div>
@@ -130,7 +133,7 @@
                     const url = URL.createObjectURL(blob);
 
                     window.open(url); // tampilkan PDF
-                    window.location.href = 'invoice.php';
+                    window.location.href = 'produk.php';
             });
 
             setInterval(() => {
@@ -163,8 +166,8 @@
                     dllink.download = filename;
                     dllink.click();
 
-                    // window.open(url); // tampilkan PDF
-                    window.location.href = 'invoice.php';
+                    window.open(url); // tampilkan PDF
+                    window.location.href = 'produk.php';
             });
 
             setInterval(() => {

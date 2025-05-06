@@ -125,9 +125,11 @@
                                         <i class="fa-solid fa-cart-shopping text-[#006E2A]"></i>
                                     </a>
                                     <?php endif ?>
-                                    <a href="#" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
+                                    <?php if ($varian['stok'] <= 0): ?>
+                                    <a href="#" onclick="confirmDelete(<?php echo $produk['id_produk'] ?>, <?php echo $varian['id_varian'] ?>)" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
                                         <i class="fa-solid fa-trash-can text-[#FF0909]"></i>
                                     </a>
+                                    <?php endif ?>
                                     <a href="detail-produk.php?id_produk=<?php echo $produk['id_produk'] ?>&id_varian=<?php echo $varian['id'] ?>" class="text-[clamp(0.45rem,1vw,4rem)] p-1 hover:bg-opacity-75 rounded-md">
                                         <i class="fa-solid fa-circle-info text-[#000000]"></i>
                                     </a>
@@ -261,7 +263,7 @@
             document.body.appendChild(form);
             form.submit();
         }
-        function confirmDelete(id) {
+        function confirmDelete(id, idv) {
             if (confirm("Apakah anda yakin menghapus produk ini?")) {
                 let form = document.createElement("form");
                 form.method = "POST";
@@ -272,7 +274,13 @@
                 input.name = "id_produk";
                 input.value = id;
 
+                let input_var = document.createElement("input");
+                input_var.type = "hidden";
+                input_var.name = "id_varian";
+                input_var.value = idv;
+
                 form.appendChild(input);
+                form.appendChild(input_var);
                 document.body.appendChild(form);
                 form.submit();
             }

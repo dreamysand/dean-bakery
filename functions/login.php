@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" &&
 				?>
                 <script>
                     alert("Log in berhasil");
-                    window.location.href = "admin/profile.php";
+                    window.location.href = "admin/dashboard.php";
                 </script>
                 <?php
 			} else {

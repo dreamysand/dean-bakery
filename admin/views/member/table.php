@@ -58,9 +58,11 @@
                         <a href="#" onclick="editMember(<?=$member['id_member'] ?>)" class="text-[clamp(0.45rem,1vw,4rem)] p-3 hover:bg-opacity-75 rounded-md w-max">
                             <i class="fa-solid fa-pen-to-square text-[#1B2ED6]"></i>
                         </a>
+                        <?php if ($member['status'] == "tidak aktif"): ?>
                         <a href="#" onclick="confirmDelete(<?=$member['id_member'] ?>)" class="text-[clamp(0.45rem,1vw,4rem)] p-3 hover:bg-opacity-75 rounded-md w-max">
                             <i class="fa-solid fa-trash-can text-[#FF0909]"></i>
                         </a>
+                        <?php endif ?>
                     </td>
                 </tr>
                 <?php endforeach ?>

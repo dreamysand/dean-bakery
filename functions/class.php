@@ -1125,6 +1125,39 @@ class Produk
 		}
 	}
 
+	function DeleteProduk($id_produk, $id_varian)
+	{
+		global $config, $table_produk, $table_varian;
+		$sql_Delete_Query = "DELETE FROM $table_varian WHERE id = :id_varian";
+		$stmt = $config->prepare($sql_Delete_Query);
+		if ($stmt->execute([
+			":id_varian" => $id_varian
+		])) {
+			$stmt = null;
+			$sql_Check_Query = "SELECT COUNT(*) FROM $table_varian WHERE fid_produk = :id_produk";
+			$stmt = $config->prepare($sql_Check_Query);
+			if ($stmt->execute([
+				":id_produk" => $id_produk
+			])) {
+				$column = $stmt->fetchColumn(PDO::FETCH_ASSOC);
+				if ($colum <= 0) {
+					$stmt = null;
+					$sql_Delete_Query = "DELETE FROM $table_produk WHERE id_produk = :id_produk";
+					$stmt = $config->prepare($sql_Delete_Query);
+					if ($stmt->execute([
+						":id_produk" => $id_produk
+					])) {
+						return true;
+					}
+				} else {
+					return true;
+				}
+			}
+		} else {
+			return false;
+		}
+	}
+
 	function AddProduk($nama_produk, $id_kategori, $deskripsi)
 	{
 		global $config, $table_produk;
@@ -1811,7 +1844,7 @@ class Member
 		global $config, $table;
 
 		$now_time = new DateTime();
-		$now_time->modify("-1 month");
+		$now_time->modify("+1 month");
 		$sql_Select_Query = "SELECT last_transaction 
 		FROM $table
 		WHERE
@@ -1907,8 +1940,7 @@ class Member
 					return $return_Value;	
 				} else {
 					$return_Value = [
-						"msg" => "Gagal memperbarui status",
-						"value" => false 
+						"value" =>  false
 					];
 					return $return_Value;
 				}

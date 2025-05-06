@@ -32,10 +32,10 @@
                         </div>
                     </div>
                     <div class="mb-6 flex items-center absolute bottom-3 right-6">
-                        <a href="edit.php?id_admin=<?= $admin['f_id'] ?>" class="bg-[#E7B548] p-1 hover:bg-opacity-75 text-white rounded-md mr-4">
+                        <a href="#" onclick="editAdmin(<?php echo $id ?>)" class="bg-[#E7B548] p-1 hover:bg-opacity-75 text-white rounded-md mr-4">
                             <span class="hidden md:block">Edit Produk</span>
                         </a>
-                        <a href="#" onclick="confirmDelete(<?=$admin['f_id'] ?>)" class="bg-[#CB2828] p-1 hover:bg-opacity-75 text-white rounded-md">
+                        <a href="#" onclick="confirmDelete(<?=$id ?>)" class="bg-[#CB2828] p-1 hover:bg-opacity-75 text-white rounded-md">
                             <span class="hidden md:block">Hapus Produk</span>
                         </a>
                     </div>
@@ -47,5 +47,37 @@
     <footer class="absolute bottom-0 right-0 left-0 bg-[#101018] p-6 text-center">
         <p class="text-white">&copy; 2025 Dean Bakery. All Right Reserved</p>
     </footer>
+    <script>
+        function confirmDelete(id) {
+            if (confirm("Apakah anda yakin menghapus admin ini?")) {
+                let form = document.createElement("form");
+                form.method = "POST";
+                form.action = "delete.php?profile";
+
+                let input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "id_admin";
+                input.value = id;
+
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+        function editAdmin(id) {
+            let form = document.createElement("form");
+            form.method = "POST";
+            form.action = "edit.php?profile";
+
+            let input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "id_admin";
+            input.value = id;
+
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
 </body>
 </html>

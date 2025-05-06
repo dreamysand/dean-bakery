@@ -18,5 +18,9 @@ if (isset($_GET['admin'])) {
 	require __DIR__.DIRECTORY_SEPARATOR."functions".DIRECTORY_SEPARATOR."kategori".DIRECTORY_SEPARATOR."edit-kategori.php";
 	require __DIR__.DIRECTORY_SEPARATOR."functions".DIRECTORY_SEPARATOR."kategori".DIRECTORY_SEPARATOR."update-kategori.php";
 	require __DIR__.DIRECTORY_SEPARATOR."views".DIRECTORY_SEPARATOR."kategori".DIRECTORY_SEPARATOR."edit-kategori.php";
+} elseif (isset($_GET['profile'])) {
+	require __DIR__.DIRECTORY_SEPARATOR."functions".DIRECTORY_SEPARATOR."admin-table".DIRECTORY_SEPARATOR."edit-profile.php";
+	require __DIR__.DIRECTORY_SEPARATOR."functions".DIRECTORY_SEPARATOR."admin-table".DIRECTORY_SEPARATOR."update-profile.php";
+	require __DIR__.DIRECTORY_SEPARATOR."views".DIRECTORY_SEPARATOR."admin-table".DIRECTORY_SEPARATOR."edit-profile.php";
 }
 ?>

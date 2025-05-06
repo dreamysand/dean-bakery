@@ -94,7 +94,7 @@
                     <div>
                         <label class="block font-medium">MEMBER</label>
                         <select data-member name="member" id="" class="w-full border p-2 rounded" onchange="SetDataMember(this.value)">
-                            <option value="" selected>Pilih Member</option>
+                            <option data-no-telp="" value="" selected>Pilih Member</option>
                             <?php
                             $member = new Member();
                             $table = "member";
@@ -113,7 +113,7 @@
                             }
                             ?>
                             <?php foreach ($result_member as $member): ?>
-                                <option value="<?php echo $member['id_member'] ?>"><?php echo $member['no_telp'] ?></option>
+                                <option data-no-telp="<?php echo $member['no_telp'] ?>" value="<?php echo $member['id_member'] ?>"><?php echo $member['no_telp'] ?></option>
                             <?php endforeach ?>
                         </select>
                     </div>
@@ -261,7 +261,7 @@
 
             for (var i = 0; i < member_opts.length; i++) {
                 if (member_opts[i].selected) {
-                    selected_member = member_opts[i].innerText;
+                    selected_member = member_opts[i].getAttribute("data-no-telp");
                 }
             }
 
@@ -318,7 +318,7 @@
                 .then(response => response.text())
                 .then(data => {
                     console.log("Respon dari server:", data);
-                    // window.location.href="invoice.php";
+                    window.location.href="invoice.php";
                 })
                 .catch(error => {
                     console.error("Error:", error);

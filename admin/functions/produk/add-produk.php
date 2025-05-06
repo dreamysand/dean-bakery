@@ -80,16 +80,28 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" &&
                     }
                     $kode_bar = rand(10000000, 99999999);
                     if ($produk->AddVarian($nama, $varian, $expired, $stok, $modal, $harga_jual, $keuntungan, $image_File['url'], $kode_bar)) {
-                        echo "Berhasil Hore";
-                        exit();
+                       ?>
+                        <script>
+                            alert("Berhasil");
+                            window.location.href = "produk.php";
+                        </script>
+                        <?php   
                     } else {
-                        echo "Gagal nambah varian";
-                        exit();
+                       ?>
+                        <script>
+                            alert("Gagal");
+                            window.location.href = "produk.php";
+                        </script>
+                        <?php   
                     }
                 }
             } else {
-                echo "Gagal ngapdet";
-                exit();
+                ?>
+                <script>
+                    alert("Gagal ngapdet");
+                    window.location.href = "produk.php";
+                </script>
+                <?php   
             }
         } else {
             if ($produk->AddProduk($nama, $id_kategori, $deskripsi)) {
@@ -99,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" &&
                     ?>
                     <script>
                         alert("Gambar kosong");
-                        window.location.href = "register-admin.php";
+                        window.location.href = "produk.php";
                     </script>
                     <?php	
                 }
@@ -111,16 +123,28 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" &&
                 } else {
                     $kode_bar = rand(10000000, 99999999);
                     if ($produk->AddVarian($nama, $varian, $expired, $stok, $modal, $harga_jual, $keuntungan, $image_File['url'], $kode_bar)) {
-                        echo "Berhasil Hore";
-                        exit();
+                       ?>
+                        <script>
+                            alert("Berhasil");
+                            window.location.href = "produk.php";
+                        </script>
+                        <?php   
                     } else {
-                        echo "Gagal nambah varian";
-                        exit();
+                       ?>
+                        <script>
+                            alert("Gagal");
+                            window.location.href = "produk.php";
+                        </script>
+                        <?php   
                     }
                 }
             } else {
-                echo "Gagal nambah produk";
-                exit();
+                ?>
+                <script>
+                    alert("Gagal nambah");
+                    window.location.href = "produk.php";
+                </script>
+                <?php   
             }
         }
 	}

@@ -31,33 +31,34 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" &&
                 window.location.href = "register-admin.php";
             </script>
             <?php
-        }
-        $image_File = $image->ImageUpload($_FILES['gambar'], $path_Image, $URL_Path);
+        } else {
+            $image_File = $image->ImageUpload($_FILES['gambar'], $path_Image, $URL_Path);
 
-        if ($image_File == null) {
-            ?>
-            <script>
-                alert("Gambar kosong");
-                window.location.href = "register-admin.php";
-            </script>
-            <?php	
-        }
-
-        if ($hashed_Password = $account->HashPassword($password)) {
-            if ($account->AddAdmin($email, $username, $hashed_Password, $image_File['url'])) {
+            if ($image_File == null) {
                 ?>
                 <script>
-                    alert("Registrasi berhasil");
-                    window.location.href = "admin-table.php";
+                    alert("Gambar kosong");
+                    window.location.href = "register-admin.php";
                 </script>
-                <?php
-            } else {
-                ?>
-                <script>
-                    alert("Registrasi gagal");
-                    window.location.href = "admin-table.php";
-                </script>
-                <?php
+                <?php	
+            }
+
+            if ($hashed_Password = $account->HashPassword($password)) {
+                if ($account->AddAdmin($email, $username, $hashed_Password, $image_File['url'])) {
+                    ?>
+                    <script>
+                        alert("Registrasi berhasil");
+                        window.location.href = "admin-table.php";
+                    </script>
+                    <?php
+                } else {
+                    ?>
+                    <script>
+                        alert("Registrasi gagal");
+                        window.location.href = "admin-table.php";
+                    </script>
+                    <?php
+                }
             }
         }
 	}

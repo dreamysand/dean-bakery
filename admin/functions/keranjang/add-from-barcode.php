@@ -18,11 +18,20 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" &&
 	$stok = $result_varian['stok'];
 	$harga_jual = $result_varian['harga_jual'];
 
-	$cart = isset($_SESSION['cart']) ? unserialize($_SESSION['cart']) : new Cart();
-	$cart->AddItems($id_produk, $id_varian, $nama_produk, $varian, $harga_jual, $jumlah, $tanggal_expired, $gambar, $stok);
-	$_SESSION['cart'] = serialize($cart);
+	if (date("Y-m-d") <= $tanggal_expired) {
+		?>
+		<script>
+			alert("Gak bisa tambahkan item yang kadaluwarsa");
+			window.location.href = "keranjang.php";
+		</script>
+		<?php
+	} else {
+		$cart = isset($_SESSION['cart']) ? unserialize($_SESSION['cart']) : new Cart();
+		$cart->AddItems($id_produk, $id_varian, $nama_produk, $varian, $harga_jual, $jumlah, $tanggal_expired, $gambar, $stok);
+		$_SESSION['cart'] = serialize($cart);
 
-	header("Location: keranjang.php");
-	exit();
+		header("Location: keranjang.php");
+		exit();
+	}
 }
 ?>

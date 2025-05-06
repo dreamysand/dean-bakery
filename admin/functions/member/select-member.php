@@ -25,7 +25,7 @@ if ($members_Data != null) {
 		} else {
 			?>
 			<script>
-				alert("Member dengan id: ".<?php echo $member_Data['id'] ?>." telah nonaktif")
+				alert("Member dengan id: ".<?php echo $member_Data['id_member'] ?>." telah nonaktif")
 			</script>
 			<?php
 			$members->UpdateStatusMemberToInactive($member_Data['id_member']);

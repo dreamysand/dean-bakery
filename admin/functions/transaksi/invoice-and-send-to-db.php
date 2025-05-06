@@ -63,11 +63,11 @@ if (isset($_SESSION['invoice_data']) &&
 					if ($member->UpdateStatusMemberToActive($id_member)) {
 						echo "Hurayi";
 					}
-					if ($produk->SubtractStok($id_varian, $jumlah)) {
-						if ($produk->AddSold($id_varian, $jumlah)) {
+					if ($produk->SubtractStok($jumlah, $id_varian)) {
+						if ($produk->AddSold($jumlah, $id_varian)) {
 							echo "Hurayo";
 						}
-						echo "Hurayo";
+						echo "Hurayai";
 					}
 				} else {
 					echo "Oh SHite";
@@ -223,14 +223,14 @@ if (isset($_SESSION['invoice_data']) &&
 			file_put_contents($tempFilePath, $output);
 			$token = 'gyf2hpa0eonzchsr';
 			$instanceId = 'instance107033';
-			$phone = '085717277864'; // no WA tujuan
+			$phone = $no_telp; // no WA tujuan
 
 			$url = "https://api.ultramsg.com/$instanceId/messages/document";
 			$data = [
 			    'token' => $token,
 			    'to' => $phone,
 			    'filename' => 'invoice.pdf',
-			    'document' => ' https://3cd5-114-79-5-231.ngrok-free.app/dean-bakery/admin/' . $tempFilePath // Harus URL akses publik
+			    'document' => 'https://8273-114-10-112-253.ngrok-free.app/dean-bakery/admin/' . $tempFilePath // Harus URL akses publik
 			];
 
 			$ch = curl_init($url);
